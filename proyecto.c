@@ -78,7 +78,7 @@ void VerProyectos(States *State){
   puts("2. Revert");
   puts("3. Pull");
   puts("4. Status");
-  puts("5. Regresar");
+  puts("5. Regresar menu anterior");
   scanf("%d", &Opcion);
 
     switch(Opcion){
