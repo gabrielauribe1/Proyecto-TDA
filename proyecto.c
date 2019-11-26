@@ -48,6 +48,7 @@ void MenuPrincipal(States *State){
   puts("2. Crear proyectos");
   puts("3. Crear usuario");
   puts("4. Salir");
+  puts("hola");
   scanf("%d", &Opcion);
 
     switch(Opcion){
