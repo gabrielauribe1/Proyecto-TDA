@@ -1,29 +1,25 @@
 // Inclusipn de bibliotecas
-#include "maquina_de_estados.h"
+#include "maquina_de_estado.h"
 #include<stdio.h>
 #include<string.h>
 #include<stdilb.h>
 
-typedef struct def_Usuarios
-{
+typedef struct def_Usuarios{
   char usuario[20], contra[20];
   struct def_Usuarios *sig;
 }tipousuarios;
 
-typedef struct def_UsuProyecto
-{
+typedef struct def_UsuProyecto{
   char nproyecto[20], usuario[20];
   struct def_UsuProyecto *sig;
 }tipouproyecto;
 
-typedef struct def_MasterBranch
-{
+typedef struct def_MasterBranch{
   char nproyecto[20], ncommit[20];
   struct def_MasterBranch *sig;
 }tipomasterb;
 
-typedef struct def_Commit
-{
+typedef struct def_Commit{
   int numcom;
   char ncommit[20], fecha[20], usuario[20], nproyecto[20];
   struct def_Commit *sig;
