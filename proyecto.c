@@ -25,11 +25,17 @@ typedef struct def_Commit{
   struct def_Commit *sig;
 }tipocommit;
 
+tipousuarios *iniciousr;
+tipocommit *iniciocom;
+tipomasterb *iniciomb;
+tipouproyecto *iniciousrpro;
+
 int main(void){
     system("clear");
-    States MachineState=LOG_IN;
+    States MachineState=LEER_ARCHIVOS;
     //maquina de estados con sus respectivas funciones
     StateMachine Machine[] = {
+        {LEER_ARCHIVOS, LeerArch},
         {LOG_IN, LogIn},
         {MENU_PRINCIPAL, MenuPrincipal},
         {VER_PROYECTOS, VerProyectos},
@@ -53,6 +59,30 @@ int main(void){
     }
 
     return 0;
+}
+
+void LeerArch(States* State){
+  char string[21];
+  tipousuarios *temp,*temp2;
+  FILE *archivo;
+  archivo=fopen("usuarios.txt","rt");
+  if(archivo!=NULL){
+    while(fgets(string,19,archivo)!=NULL){
+      temp=(tipousuarios*)malloc(sizeof(tipousuarios));
+      strcpy(temp->usuario,string);
+      temp->usuario[strlen(temp->usuario)-1]='\0';
+      if(*iniciousr!=NULL){
+        temp2=*iniciousr;
+        while(temp2->ptrsig!=NULL)
+          temp2=temp2->ptrsig;
+        temp2->ptrsig=temp;
+      }
+      else
+        *iniciousr=temp;
+    }
+  }
+  fclose(archivo);
+  *State=LOG_IN;
 }
 
 //Menu
@@ -147,6 +177,7 @@ void CrearProyecto(States *State){
 }
 
 void CrearUsuario(States *State){
+
   *State=MENU_PRINCIPAL;
 }
 

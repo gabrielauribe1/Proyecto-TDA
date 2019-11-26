@@ -5,6 +5,7 @@
 
 // Definicion de los estados de la maquina de estados
 typedef enum States{
+    LEER_ARCHIVOS,
     LOG_IN,
     MENU_PRINCIPAL,
     VER_PROYECTOS,
