@@ -15,20 +15,20 @@ typedef struct def_UsuProyecto{
 }tipouproyecto;
 
 typedef struct def_MasterBranch{
-  char nproyecto[20], ncommit[50];
+  char nproyecto[20], ncommit[100];
   struct def_MasterBranch *sig;
 }tipomasterb;
 
 typedef struct def_Commit{
   int numcom;
-  char ncommit[50], fecha[20], usuario[20], nproyecto[20];
+  char ncommit[100], fecha[20], usuario[20], nproyecto[20];
   struct def_Commit *sig;
 }tipocommit;
 
-tipousuarios *iniciousr;
-tipocommit *iniciocom;
-tipomasterb *iniciomb;
-tipouproyecto *iniciousrpro;
+tipousuarios *iniciousr=NULL;
+tipocommit *iniciocom=NULL;
+tipomasterb *iniciomb=NULL;
+tipouproyecto *iniciousrpro=NULL;
 
 int main(void){
     system("clear");
@@ -62,7 +62,7 @@ int main(void){
 }
 
 void LeerArch(States* State){
-  char string[51];
+  char string[101];
   tipousuarios *temp,*temp2;
   tipouproyecto *temp3, *temp4;
   tipomasterb *temp5, *temp6;
@@ -90,7 +90,7 @@ void LeerArch(States* State){
     }
      fclose(archivo);
   }
- 
+
 
   //Se lee la relacion entre USUARIOS Y PROYECTOS
   archivo = fopen("proyecto.txt", "rt");
@@ -115,13 +115,13 @@ void LeerArch(States* State){
       }
       fclose(archivo);
     }
-   
-   
+
+
    //Se leen los commits de los MASTER B
   archivo = fopen("masterbranch.txt", "rt");
   if(archivo!=NULL)
     {
-      while(fgets(string,49,archivo)!=NULL){
+      while(fgets(string,99,archivo)!=NULL){
 	temp5=(tipomasterb*)malloc(sizeof(tipomasterb));
 	strcpy(temp5->ncommit,string);
 	temp5->ncommit[strlen(temp5->ncommit)-1]='\0';
@@ -139,20 +139,20 @@ void LeerArch(States* State){
       }
       fclose(archivo);
     }
-  
+
   //Se leen todos los COMMITS
   archivo = fopen("commit.txt", "rt");
   if(archivo!=NULL)
     {
-      while(fgets(string,49,archivo)!=NULL){
+      while(fgets(string,99,archivo)!=NULL){
 	temp7=(tipocommit*)malloc(sizeof(tipocommit));
 	strcpy(temp7->ncommit,string);
 	temp7->ncommit[strlen(temp7->ncommit)-1]='\0';
-	
+
 	fgets(string,19,archivo);
 	strcpy(temp7->nproyecto,string);
 	temp7->nproyecto[strlen(temp7->nproyecto)-1]='\0';
-	
+
 	fgets(string,19,archivo);
 	strcpy(temp7->fecha,string);
 	temp7->fecha[strlen(temp7->fecha)-1]='\0';
@@ -162,7 +162,7 @@ void LeerArch(States* State){
 	temp7->usuario[strlen(temp7->usuario)-1]='\0';
 
 	fscanf(archivo, "%i\n", &temp7->numcom);
-	
+
 	if(iniciocom!=NULL){
 	  temp8=iniciocom;
 	  while(temp8->sig!=NULL)
@@ -184,17 +184,21 @@ void LogIn(States* State){
     temp=iniciousr;
     puts("Introduzca su nombre de usuario: ");
     scanf("%s", usuario);
-    while(strcmp(usuario,temp->usuario)!=0 && temp!=NULL)
+    while(temp!=NULL && strcmp(usuario,temp->usuario)!=0)
       temp=temp->sig;
     if(temp!=NULL){
       puts("Introduzca su contraseña: ");
+      __fpurge(stdin);
       scanf("%s", contrasena);
+      if(strcmp(contrasena,temp->contra)==0)
+        *State=MENU_PRINCIPAL;
+      else
+        *State=LOG_IN;
     }
     else{
       puts("El usuario no existe");
       *State=LOG_IN;
     }
-    //*State=MENU_PRINCIPAL;
 }
 
 void MenuPrincipal(States *State){
