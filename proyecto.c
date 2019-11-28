@@ -45,6 +45,7 @@ int main(void){
         {STATUS, Status},
         {CREAR_PROYECTO, CrearProyecto},
         {CREAR_USUARIO, CrearUsuario},
+	{ESCRIBIR, escribir},
         {SALIR, Salir}
     };
 
@@ -73,7 +74,7 @@ void LeerArch(States* State){
   archivo=fopen("usuarios.txt","rt");
   if(archivo!=NULL){
     while(fgets(string,19,archivo)!=NULL){
-      temp=(tipousuarios*)malloc(sizeof(tipousuarios));
+       temp=(tipousuarios*)malloc(sizeof(tipousuarios));
       strcpy(temp->usuario,string);
       temp->usuario[strlen(temp->usuario)-1]='\0';
       fgets(string,19,archivo)!=NULL;
@@ -221,7 +222,7 @@ void MenuPrincipal(States *State){
             *State = CREAR_USUARIO;
             break;
         case 4:
-            *State = SALIR;
+            *State = ESCRIBIR;
             break;
         default:
             puts("Opcion invalida");
@@ -283,8 +284,47 @@ void CrearProyecto(States *State){
 }
 
 void CrearUsuario(States *State){
-
+  tipousuarios *nuevo,*busca;
+  char nombre[20],passwrd[20];
+  //hay que validar que no se repita el usuario
+  printf("Como se va a llamar el nuevo usuario (19 caracteres max)\n");
+  __fpurge(stdin);
+  gets(nombre);
+  printf("Cual va a hacer la contrasena(19 caracteres max)\n");
+  __fpurge(stdin);
+  gets(passwrd);
+  nuevo=(tipousuarios*)malloc(sizeof(tipousuarios));
+  strcpy(nuevo->usuario,nombre);
+  strcpy(nuevo->contra,passwrd);
+  nuevo->sig=NULL;
+  if(iniciousr!=NULL){
+    busca=iniciousr;
+    while(busca->sig!=NULL)
+      busca=busca->sig;
+    busca->sig=nuevo;
+  }
+  else
+    iniciousr=nuevo;
   *State=MENU_PRINCIPAL;
+}
+
+void escribir(States *State){
+  FILE* archivo;
+  tipousuarios *usuarios;
+  tipouproyecto *proyecto;
+  tipomasterb *master;
+  tipocommit *commit;
+  archivo=fopen("usuarios.txt","wt");
+  usuarios=iniciousr;
+  while(usuarios!=NULL){
+    fputs(usuarios->usuario,archivo);
+    fputs("\n",archivo);
+    fputs(usuarios->contra,archivo);
+    fputs("\n",archivo);
+    usuarios=usuarios->sig;
+  }
+  fclose(archivo);
+  *State=SALIR;
 }
 
 void Salir(States *State){
