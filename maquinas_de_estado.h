@@ -27,6 +27,7 @@ typedef struct StateMachine{
 
 //prototipos de funciones
 void Inicio(States *State);
+void LeerArch(States* State);
 void LogIn(States *State);
 void MenuPrincipal(States *State);
 void VerProyectos(States *State);
