@@ -4,6 +4,7 @@
 #include<string.h>
 #include<stdilb.h>
 
+//#AlanWasHere
 typedef struct def_Usuarios{
   char usuario[20], contra[20];
   struct def_Usuarios *sig;
