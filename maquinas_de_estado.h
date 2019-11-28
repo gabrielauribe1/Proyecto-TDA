@@ -5,6 +5,7 @@
 
 // Definicion de los estados de la maquina de estados
 typedef enum States{
+    LEER_ARCHIVOS,
     LOG_IN,
     MENU_PRINCIPAL,
     VER_PROYECTOS,
@@ -26,6 +27,7 @@ typedef struct StateMachine{
 
 //prototipos de funciones
 void Inicio(States *State);
+void LeerArch(States* State);
 void LogIn(States *State);
 void MenuPrincipal(States *State);
 void VerProyectos(States *State);
