@@ -15,6 +15,7 @@ typedef enum States{
     STATUS,
     CREAR_PROYECTO,
     CREAR_USUARIO,
+    ESCRIBIR,
     SALIR,
     STATE_NUM
 } States;
@@ -38,3 +39,4 @@ void Status(States *State);
 void CrearProyecto(States *State);
 void CrearUsuario(States *State);
 void Salir(States *State);
+void escribir(States *State);
