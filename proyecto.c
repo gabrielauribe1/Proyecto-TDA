@@ -20,7 +20,7 @@ typedef struct def_MasterBranch{
 }tipomasterb;
 
 typedef struct def_Commit{
-  int numcom;
+  int numcom,pull,lineas[100];
   char ncommit[100], fecha[20], usuario[20], nproyecto[20];
   struct def_Commit *sig;
 }tipocommit;
