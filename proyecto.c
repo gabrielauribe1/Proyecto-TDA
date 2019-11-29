@@ -373,7 +373,7 @@ void escribir(States *State){
     fputs(commit->usuario,archivo);
     fputs("\n",archivo);
     fputs(mastcommitecommitr->numcom,archivo);
-    fputs("\n",archivocewrtrtryyutt);
+    fputs("\n",archivo);
     commit=commit->sig;
   }
   fclose(archivo);
