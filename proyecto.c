@@ -287,6 +287,27 @@ void CrearUsuario(States *State){
   *State=MENU_PRINCIPAL;
 }
 
+void Escribir(States *State){
+  tipousuarios *temp;
+  tipouproyecto *temp2;
+  tipomasterb *temp3;
+  tipocommit *temp4;
+  FILE *archivo;
+
+  archivo=fopen("usuarios.txt","at");
+  fclose(archivo);
+
+  archivo=fopen("proyecto.txt","at");
+  fclose(archivo);
+
+  archivo=fopen("masterbranch.txt","at");
+  fclose(archivo);
+
+  archivo=fopen("commit.txt","at");
+  fclose(archivo);
+
+}
+
 void Salir(States *State){
   exit(0);
 }
