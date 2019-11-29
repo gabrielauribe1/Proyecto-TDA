@@ -280,7 +280,22 @@ void Status(States *State){
 }
 
 void CrearProyecto(States *State){
-  *State=MENU_PRINCIPAL;
+  tipouproyecto *busca;
+  char nombre[20];
+  int Nusuarios;
+  puts("Cual es el nombre del proyecto? (max 19 caracteres)");
+  gets(nombre);
+  busca=iniciousrpro;
+  while(busca!=NULL && strcmp(busca->nproyecto,nombre)!=0)
+    busca=busca->sig;
+  if(busca!=NULL){
+    puts("Ese nombre ya esta en uso");
+    *State=CREAR_PROYECTO;
+  }
+  else{
+    puts("Cuantos usuarios va a participar?");
+    scanf()
+    *State=MENU_PRINCIPAL;
 }
 
 void CrearUsuario(States *State){
@@ -381,35 +396,35 @@ void escribir(States *State){
   *State=SALIR;
 }
 
- void Salir(States *State){
-   tipousuarios *borra;
-   tipouproyecto *proyecto;
-   tipomasterb *master;
-   tipocommit *commit;
+void Salir(States *State){
+ tipousuarios *borra;
+ tipouproyecto *proyecto;
+ tipomasterb *master;
+ tipocommit *commit;
+ borra=iniciousr;
+ while(borra!=NULL){
+   iniciousr=iniciousr->sig;
+   free(borra);
    borra=iniciousr;
-   while(borra!=NULL){
-     iniciousr=iniciousr->sig;
-     free(borra);
-     borra=iniciousr;
-   }
-   proyecto=iniciousrpro;
-   while(proyecto!=NULL){
-     iniciousrpro=iniciousrpro->sig;
-     free(proyecto);
-     proyecto=iniciousrpro;
-   }
-   master=iniciomb;
-   while(master!=NULL){
-     iniciomb=iniciomb->sig;
-     free(master);
-     master=iniciomb;
-   }
-   commit=iniciocom;
-   while(commit!=NULL){
-     iniciocom=iniciocom->sig;
-     free(commit);
-     commit=iniciocom;
-   }
-
-   exit(0);
  }
+ proyecto=iniciousrpro;
+ while(proyecto!=NULL){
+   iniciousrpro=iniciousrpro->sig;
+   free(proyecto);
+   proyecto=iniciousrpro;
+ }
+ master=iniciomb;
+ while(master!=NULL){
+   iniciomb=iniciomb->sig;
+   free(master);
+   master=iniciomb;
+ }
+ commit=iniciocom;
+ while(commit!=NULL){
+   iniciocom=iniciocom->sig;
+   free(commit);
+   commit=iniciocom;
+ }
+
+ exit(0);
+}
