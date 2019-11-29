@@ -333,6 +333,51 @@ void escribir(States *State){
   }
   fclose(archivo);
 
+  archivo=fopen("proyecto.txt","wt");
+  proyecto=iniciousrpro;
+  while(proyecto!=NULL){
+    fputs(proyecto->usuario,archivo);
+    fputs("\n",archivo);
+    fputs(proyecto->nproyecto,archivo);
+    fputs("\n",archivo);
+    proyecto=proyecto->sig;
+  }
+  fclose(archivo);
+
+  archivo=fopen("masterbranch.txt","wt");
+  master=iniciomb;
+  while(master!=NULL){
+    fputs(master->ncommit,archivo);
+    fputs("\n",archivo);
+    fputs(master->nproyecto,archivo);
+    fputs("\n",archivo);
+    fputs(master->fecha,archivo);
+    fputs("\n",archivo);
+    fputs(master->usuario,archivo);
+    fputs("\n",archivo);
+    fputs(master->numcom,archivo);
+    fputs("\n",archivo);
+    master=master->sig;
+  }
+  fclose(archivo);
+
+  archivo=fopen("commit.txt","wt");
+  commit=iniciocom;
+  while(commit!=NULL){
+    fputs(commit->ncommit,archivo);
+    fputs("\n",archivo);
+    fputs(commit->nproyecto,archivo);
+    fputs("\n",archivo);
+    fputs(commit->fecha,archivo);
+    fputs("\n",archivo);
+    fputs(commit->usuario,archivo);
+    fputs("\n",archivo);
+    fputs(mastcommitecommitr->numcom,archivo);
+    fputs("\n",archivo);
+    commit=commit->sig;
+  }
+  fclose(archivo);
+
   *State=SALIR;
 }
 
