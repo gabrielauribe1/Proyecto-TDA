@@ -286,26 +286,34 @@ void CrearProyecto(States *State){
 void CrearUsuario(States *State){
   tipousuarios *nuevo,*busca;
   char nombre[20],passwrd[20];
-  //hay que validar que no se repita el usuario
   printf("Como se va a llamar el nuevo usuario (19 caracteres max)\n");
   __fpurge(stdin);
   gets(nombre);
-  printf("Cual va a hacer la contrasena(19 caracteres max)\n");
-  __fpurge(stdin);
-  gets(passwrd);
-  nuevo=(tipousuarios*)malloc(sizeof(tipousuarios));
-  strcpy(nuevo->usuario,nombre);
-  strcpy(nuevo->contra,passwrd);
-  nuevo->sig=NULL;
-  if(iniciousr!=NULL){
-    busca=iniciousr;
-    while(busca->sig!=NULL)
-      busca=busca->sig;
-    busca->sig=nuevo;
+  busca=iniciousr;
+  while(busca!=NULL && strcmp(busca->usuario,nombre)!=0)
+    busca=busca->sig;
+  if(busca==NULL){
+    printf("Cual va a hacer la contrasena(19 caracteres max)\n");
+    __fpurge(stdin);
+    gets(passwrd);
+    nuevo=(tipousuarios*)malloc(sizeof(tipousuarios));
+    strcpy(nuevo->usuario,nombre);
+    strcpy(nuevo->contra,passwrd);
+    nuevo->sig=NULL;
+    if(iniciousr!=NULL){
+      busca=iniciousr;
+      while(busca->sig!=NULL)
+	busca=busca->sig;
+      busca->sig=nuevo;
+    }
+    else
+      iniciousr=nuevo;
+    *State=MENU_PRINCIPAL;
   }
-  else
-    iniciousr=nuevo;
-  *State=MENU_PRINCIPAL;
+  else{
+    puts("Ese usuario ya existe");
+    *State=CREAR_USUARIO;
+  }
 }
 
 void escribir(States *State){
@@ -324,9 +332,39 @@ void escribir(States *State){
     usuarios=usuarios->sig;
   }
   fclose(archivo);
+  
   *State=SALIR;
 }
 
-void Salir(States *State){
-  exit(0);
-}
+ void Salir(States *State){
+   tipousuarios *borra;
+   tipouproyecto *proyecto;
+   tipomasterb *master;
+   tipocommit *commit;
+   borra=iniciousr;
+   while(borra!=NULL){
+     iniciousr=iniciousr->sig;
+     free(borra);
+     borra=iniciousr;
+   }
+   proyecto=iniciousrpro;
+   while(proyecto!=NULL){
+     iniciousrpro=iniciousrpro->sig;
+     free(proyecto);
+     proyecto=iniciousrpro;
+   }
+   master=iniciomb;
+   while(master!=NULL){
+     iniciomb=iniciomb->sig;
+     free(master);
+     master=iniciomb;
+   }
+   commit=iniciocom;
+   while(commit!=NULL){
+     iniciocom=iniciocom->sig;
+     free(commit);
+     commit=iniciocom;
+   }
+
+   exit(0);
+ }
