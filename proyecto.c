@@ -29,7 +29,8 @@ tipousuarios *iniciousr=NULL;
 tipocommit *iniciocom=NULL;
 tipomasterb *iniciomb=NULL;
 tipouproyecto *iniciousrpro=NULL;
-char usractual [20];
+char usractual [20], proyectoElegido[20];
+
 
 int main(void){
     system("clear");
@@ -232,10 +233,35 @@ void MenuPrincipal(States *State){
 }
 
 void VerProyectos(States *State){
-  int Opcion;
-  puts("Los proyectos disponibles son los siguientes, seleccione alguno: ");
-  puts("(Se selecciona alguno)");
+  int Opcion,i=0;
+  tipouproyecto *busca,*busca2;
+  busca=iniciousrpro;
+  if (busca==NULL) {
+    puts("no hay proyectos");
+  }
+  else{
+    puts("Los proyectos disponibles son los siguientes: ");
+    while(busca!=NULL){
+      i++;
+      if(busca->sig->nproyecto!=NULL && strcmp(busca->nproyecto,busca->sig->nproyecto)!=0)
+      printf("%d. %s\n", i, busca->nproyecto);
+      else i--;
+      if(busca->sig->nproyecto==NULL){
+        i++;
+        printf("%d. %s\n", i, busca->nproyecto);
+      }
+      busca=busca->sig;
+    }
+    puts("\n");
+  }
+  puts("Seleccione alguno de los proyectos desplegados: ");
+  scanf("%d", &Opcion);
+  busca=iniciousrpro;
+  for ( i = 1; i <= Opcion; i++) {
+    printf("%d\n", i);
+  }
 
+  puts("\n¿Que deseas hacer?");
   puts("1. Commit");
   puts("2. Revert");
   puts("3. Pull");
@@ -343,10 +369,10 @@ void CrearProyecto(States *State){
 	  puts("Ese usuario no existe, inserte uno que este dado de alta");
 	  }
       }while(i<Nusuarios);
-    
+
       }
     *State=MENU_PRINCIPAL;
-    
+
 }
 
 void CrearUsuario(States *State){
