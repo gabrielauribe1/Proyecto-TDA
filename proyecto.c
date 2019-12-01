@@ -254,7 +254,7 @@ void VerProyectos(States *State){
   }
   puts("Elija uno de los proyectos desplegados: ");
   scanf("%d", &Opcion);
-  printf("%s\n", proyectoElegido[Opcion]);//el printf para ver que si escoge bien el proyecto
+  printf("Se eligio el proyecto: %s\n", proyectoElegido[Opcion]);//el printf para ver que si escoge bien el proyecto
 
   puts("\n¿Que deseas hacer?");
   puts("1. Commit");
