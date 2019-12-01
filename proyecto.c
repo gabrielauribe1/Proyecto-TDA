@@ -29,7 +29,7 @@ tipousuarios *iniciousr=NULL;
 tipocommit *iniciocom=NULL;
 tipomasterb *iniciomb=NULL;
 tipouproyecto *iniciousrpro=NULL;
-char usractual [20], proyectoElegido[20];
+char usractual [20], proyectoElegido[20][20];
 
 
 int main(void){
@@ -233,7 +233,7 @@ void MenuPrincipal(States *State){
 }
 
 void VerProyectos(States *State){
-  int Opcion,i=0;
+  int Opcion,i=0,c=0;
   tipouproyecto *busca,*busca2;
   busca=iniciousrpro;
   if (busca==NULL) {
@@ -243,23 +243,23 @@ void VerProyectos(States *State){
     puts("Los proyectos disponibles son los siguientes: ");
     while(busca!=NULL){
       i++;
-      if(busca->sig->nproyecto!=NULL && strcmp(busca->nproyecto,busca->sig->nproyecto)!=0)
-      printf("%d. %s\n", i, busca->nproyecto);
+      if(busca->sig->nproyecto!=NULL && strcmp(busca->nproyecto,busca->sig->nproyecto)!=0){
+        printf("%d. %s\n", i, busca->nproyecto);
+        strcpy(proyectoElegido[i],busca->nproyecto);
+    }
       else i--;
       if(busca->sig->nproyecto==NULL){
         i++;
         printf("%d. %s\n", i, busca->nproyecto);
+        strcpy(proyectoElegido[i],busca->nproyecto);
       }
       busca=busca->sig;
     }
     puts("\n");
   }
-  puts("Seleccione alguno de los proyectos desplegados: ");
+  puts("Elija uno de los proyectos desplegados: ");
   scanf("%d", &Opcion);
-  busca=iniciousrpro;
-  for ( i = 1; i <= Opcion; i++) {
-    printf("%d\n", i);
-  }
+  printf("%s\n", proyectoElegido[Opcion]);//el printf para ver que si escoge bien el proyecto
 
   puts("\n¿Que deseas hacer?");
   puts("1. Commit");
