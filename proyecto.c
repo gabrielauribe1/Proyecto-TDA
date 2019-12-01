@@ -243,16 +243,11 @@ void VerProyectos(States *State){
     puts("Los proyectos disponibles son los siguientes: ");
     while(busca!=NULL){
       i++;
-      if(busca->sig->nproyecto!=NULL && strcmp(busca->nproyecto,busca->sig->nproyecto)!=0){
+      if(strcmp(busca->usuario,usractual)==0){
         printf("%d. %s\n", i, busca->nproyecto);
         strcpy(proyectoElegido[i],busca->nproyecto);
     }
       else i--;
-      if(busca->sig->nproyecto==NULL){
-        i++;
-        printf("%d. %s\n", i, busca->nproyecto);
-        strcpy(proyectoElegido[i],busca->nproyecto);
-      }
       busca=busca->sig;
     }
     puts("\n");
