@@ -2,6 +2,7 @@
 #include "maquinas_de_estado.h"
 #include<stdio.h>
 #include<string.h>
+#include<time.h>
 
 typedef struct def_Usuarios{
   char usuario[20], contra[20];
@@ -288,10 +289,14 @@ void VerProyectos(States *State){
 }
 
 void Commit(States *State){
-  char string[1000], string2[1000], archcommit[50];
+  char string[1000], string2[1000], archcommit[50], archcommit2[100],buffer[20];
   tipocommit *busca,*comactual=NULL;
   int numeroc=0;
   FILE *archivo, *archivo2;
+
+  //uso de la libreria time.h
+  time_t now;
+  struct tm *mytime = localtime(&now);
 
   busca=iniciocom;
   while(busca!=NULL){
@@ -300,6 +305,7 @@ void Commit(States *State){
     busca=busca->sig;
   }
   puts("Escribe el nombre de archivo que deseas hacer commit");
+  __fpurge(stdin);
   gets(archcommit);
   if(comactual==NULL){
     puts("Todavia no tiene ningun commit anterior");
@@ -307,6 +313,30 @@ void Commit(States *State){
   }
   else
     numeroc=busca->numcom+1;
+  archivo= fopen(archcommit, "rt");
+  if(archivo!=NULL){
+    strcpy(archcommit2,proactual);
+    strcat(archcommit2, usractual);
+    //strcat(archcommit2, time HH:MM-DD-MM-YYYY_);
+    //sprintf(archcommit, numeroc); ver sintaxis
+    //strcat(archcommit2, ".txt");
+
+    archivo2=fopen(archcommit2, "wt");
+
+    while(fgets(archivo, 999, string)!=NULL){
+      string[strlen(string)-1]='\0';
+      fprintf(archivo, "%s\n", string);
+    }
+    fclose(archivo);
+    fclose(archivo2);
+
+  }
+  else{
+  puts("El archivo insertado no existe");
+  *State=VER_PROYECTOS;
+}
+
+
 
 
 }
