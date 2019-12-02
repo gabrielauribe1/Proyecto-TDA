@@ -288,7 +288,27 @@ void VerProyectos(States *State){
 }
 
 void Commit(States *State){
-  *State = MENU_PRINCIPAL;
+  char string[1000], string2[1000], archcommit[50];
+  tipocommit *busca,*comactual=NULL;
+  int numeroc=0;
+  FILE *archivo, *archivo2;
+
+  busca=iniciocom;
+  while(busca!=NULL){
+    if(strcmp(busca->usuario, usractual)==0 && strcmp(busca->nproyecto, proactual)==0)
+      comactual=busca;
+    busca=busca->sig;
+  }
+  puts("Escribe el nombre de archivo que deseas hacer commit");
+  gets(archcommit);
+  if(comactual==NULL){
+    puts("Todavia no tiene ningun commit anterior");
+    numeroc++;
+  }
+  else
+    numeroc=busca->numcom+1;
+
+
 }
 
 void Revert(States *State){
