@@ -24,11 +24,14 @@ typedef struct def_Commit{
   struct def_Commit *sig;
 }tipocommit;
 
+//Variables globales
+//Inicios de las listas dinamicas, ademas de variables de contral de usuario y proyecto
 tipousuarios *iniciousr=NULL;
 tipocommit *iniciocom=NULL;
 tipomasterb *iniciomb=NULL;
 tipouproyecto *iniciousrpro=NULL;
 char usractual [20];
+char proactual[20];
 
 int main(void){
     system("clear");
@@ -231,16 +234,36 @@ void MenuPrincipal(States *State){
 }
 
 void VerProyectos(States *State){
-  int Opcion;
+  int Opcion,i=0;
+  tipouproyecto *busca;
+  char proyectos[30][20];
   puts("Los proyectos disponibles son los siguientes, seleccione alguno: ");
-  puts("(Se selecciona alguno)");
+  busca=iniciousrpro;
+  while(busca!=NULL){
+    if(strcmp(busca->usuario,usractual)==0){
+      strcpy(proyectos[i],busca->nproyecto);
+      i++;
+      printf("%i.- ",i);
+      puts(busca->nproyecto);
+    }
+    busca=busca->sig;
+  }
+  if(i==0){
+    system("clear");
+    puts("No tienes proyectos");
+    *State=MENU_PRINCIPAL;
+  }
+  else{
+    __fpurge(stdin);
+    scanf(" %i",&Opcion);
+    strcpy(proactual,proyectos[Opcion-1]);
 
-  puts("1. Commit");
-  puts("2. Revert");
-  puts("3. Pull");
-  puts("4. Status");
-  puts("5. Regresar menu anterior");
-  scanf("%d", &Opcion);
+    puts("1. Commit");
+    puts("2. Revert");
+    puts("3. Pull");
+    puts("4. Status");
+    puts("5. Regresar menu anterior");
+    scanf("%d", &Opcion);
 
     switch(Opcion){
         case 1:
@@ -261,6 +284,7 @@ void VerProyectos(States *State){
         default:
             puts("Opcion invalida");
     }
+  }
 }
 
 void Commit(States *State){

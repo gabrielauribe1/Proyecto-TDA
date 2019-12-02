@@ -1,25 +1,14 @@
-alan
-proy2
-gaby
-proy2
+principal
+proy
 david
-proy2
-<<<<<<< HEAD
+proy
 gaby
-proyectoprueba
+proy
+principal
+analogicos
+gaby
+analogicos
+principal
+BD
 david
-proyectoprueba
-=======
-alan
-proy3
-gaby
-proy3
-alan
-proy4
-david
-proy4
-alan
-proy5
-gaby
-proy5
->>>>>>> 12bbcbe300a7aa2c04170ff36ef7bd46d9e247e6
+BD
