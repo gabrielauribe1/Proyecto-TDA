@@ -303,48 +303,44 @@ void CrearProyecto(States *State){
     strcpy(nuevousuario->usuario,usractual);
     strcpy(nuevousuario->nproyecto,nombre);
     nuevousuario->sig=NULL;
-    if(iniciousrpro!=NULL)
-      {
-	busca3=iniciousrpro;
-	while(busca3->sig!=NULL)
-	  busca3=busca3->sig;
-	busca3->sig=nuevousuario;
+    if(iniciousrpro!=NULL){
+    	busca3=iniciousrpro;
+    	while(busca3->sig!=NULL)
+    	  busca3=busca3->sig;
+    	busca3->sig=nuevousuario;
       }
     else
       iniciousrpro=nuevousuario;
-    do
-      {
-	printf("Inserta el nombre del usuario %d:\n", i+1);
-	__fpurge(stdin);
-	gets(nombreusu);
-	busca2=iniciousr;
-	while(busca2!=NULL && strcmp(busca2->usuario,nombreusu)!=0)
-	  busca2=busca2->sig;
-	if(busca2!=NULL)
-	    {
-	    i++;
-	    nuevousuario=(tipouproyecto*)malloc(sizeof(tipouproyecto));
-	    strcpy(nuevousuario->usuario,nombreusu);
-	    strcpy(nuevousuario->nproyecto,nombre);
-	    nuevousuario->sig=NULL;
-	    if(iniciousrpro!=NULL)
-	      {
-		busca3=iniciousrpro;
-		while(busca3->sig!=NULL)
-		  busca3=busca3->sig;
-		busca3->sig=nuevousuario;
+    do{
+    	printf("Inserta el nombre del usuario %d:\n", i+1);
+    	__fpurge(stdin);
+    	gets(nombreusu);
+    	busca2=iniciousr;
+    	while(busca2!=NULL && strcmp(busca2->usuario,nombreusu)!=0)
+    	  busca2=busca2->sig;
+    	if(busca2!=NULL){
+  	    i++;
+  	    nuevousuario=(tipouproyecto*)malloc(sizeof(tipouproyecto));
+  	    strcpy(nuevousuario->usuario,nombreusu);
+  	    strcpy(nuevousuario->nproyecto,nombre);
+  	    nuevousuario->sig=NULL;
+  	    if(iniciousrpro!=NULL){
+      		busca3=iniciousrpro;
+      		while(busca3->sig!=NULL)
+      		  busca3=busca3->sig;
+      		busca3->sig=nuevousuario;
 	      }
-	    else
-	      iniciousrpro=nuevousuario;
-	  }
-	else
-	  {
-	  puts("Ese usuario no existe, inserte uno que este dado de alta");
-	  }
-      }while(i<Nusuarios);
+  	    else
+  	      iniciousrpro=nuevousuario;
+  	  }
+  	  else
+  	  {
+  	  puts("Ese usuario no existe, inserte uno que este dado de alta");
+  	  }
+    }while(i<Nusuarios);
 
-      }
-    *State=MENU_PRINCIPAL;
+  }
+  *State=MENU_PRINCIPAL;
 
 }
 
