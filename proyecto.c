@@ -1,9 +1,8 @@
-// Inclusipn de bibliotecas
+// Inclusion de bibliotecas
 #include "maquinas_de_estado.h"
 #include<stdio.h>
 #include<string.h>
 
-//#AlanWasHere
 typedef struct def_Usuarios{
   char usuario[20], contra[20];
   struct def_Usuarios *sig;
@@ -207,8 +206,6 @@ void LogIn(States* State){
 
 void MenuPrincipal(States *State){
   int Opcion;
-  puts("Bienvenidos al Menu principal\n");
-  puts("Favor de elegir:");
   puts("1. Ver proyectos");
   puts("2. Crear proyectos");
   puts("3. Crear usuario");
@@ -288,7 +285,7 @@ void CrearProyecto(States *State){
   tipousuarios *busca2;
   char nombre[20], nombreusu[20];
   int Nusuarios, i;
-  puts("Introduzca el nombre del proyecto (maximo 19 caracteres):");
+  puts("Cual es el nombre del proyecto? (max 19 caracteres)");
   __fpurge(stdin);
   gets(nombre);
   busca=iniciousrpro;
@@ -299,7 +296,7 @@ void CrearProyecto(States *State){
     *State=CREAR_PROYECTO;
   }
   else{
-    puts("Introduzca el numero de usuarios que van a participar en este proyecto?");
+    puts("Cuantos usuarios van a participar en este proyecto?");
     scanf(" %d", &Nusuarios);
     i=0;
     nuevousuario=(tipouproyecto*)malloc(sizeof(tipouproyecto));
@@ -317,7 +314,7 @@ void CrearProyecto(States *State){
       iniciousrpro=nuevousuario;
     do
       {
-	printf("Iserte el nombre del usuario %d:\n", i+1);
+	printf("Inserta el nombre del usuario %d:\n", i+1);
 	__fpurge(stdin);
 	gets(nombreusu);
 	busca2=iniciousr;
@@ -342,26 +339,26 @@ void CrearProyecto(States *State){
 	  }
 	else
 	  {
-	  puts("Ese usuario no existe, inserte uno que ya este dado de alta");
+	  puts("Ese usuario no existe, inserte uno que este dado de alta");
 	  }
       }while(i<Nusuarios);
-    
+
       }
     *State=MENU_PRINCIPAL;
-    
+
 }
 
 void CrearUsuario(States *State){
   tipousuarios *nuevo,*busca;
   char nombre[20],passwrd[20];
-  printf("Introduzca el nombre del nuevo usuario (maximo 19 caracteres):\n");
+  printf("Como se va a llamar el nuevo usuario (19 caracteres max)\n");
   __fpurge(stdin);
   gets(nombre);
   busca=iniciousr;
   while(busca!=NULL && strcmp(busca->usuario,nombre)!=0)
     busca=busca->sig;
   if(busca==NULL){
-    printf("Introduzca la contrasena(maximo 19 caracteres):\n");
+    printf("Cual va a hacer la contrasena(19 caracteres max)\n");
     __fpurge(stdin);
     gets(passwrd);
     nuevo=(tipousuarios*)malloc(sizeof(tipousuarios));
