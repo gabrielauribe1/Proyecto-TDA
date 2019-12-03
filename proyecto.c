@@ -22,7 +22,7 @@ typedef struct def_MasterBranch{
 }tipomasterb;
 
 typedef struct def_Commit{
-  int numcom,pull;
+  int numcom,pull,status;
   char ncommit[100], fecha[30], usuario[20], nproyecto[20],lineas[1000];
   struct def_Commit *sig;
 }tipocommit;
@@ -177,6 +177,8 @@ void LeerArch(States* State){
   fscanf(archivo, "%i\n", &temp7->pull);
 
 	fscanf(archivo, "%i\n", &temp7->numcom);
+
+  fscanf(archivo, "%i\n", &temp7->status);
   temp7->sig=NULL;
 
 	if(iniciocom!=NULL){
@@ -190,7 +192,6 @@ void LeerArch(States* State){
       }
       fclose(archivo);
     }
-    puts("Que haces aqui?");
   *State=LOG_IN;
 }
 
@@ -302,9 +303,9 @@ void VerProyectos(States *State){
 }
 
 void Commit(States *State){
-  char string[1000], string2[1000], archcommit[50], archcommit2[100],buffer[200], flag[4];
+  char string[1000], string2[1000], archcommit[50], archcommit2[100],buffer[200], flag[4],pasado[100];
   tipocommit *busca,*comactual=NULL,*nuevo;
-  int numeroc=0, pull, pulleable;
+  int numeroc=0, pull, pulleable,linea;
   FILE *archivo, *archivo2;
 
   //uso de la libreria time.h
@@ -325,13 +326,11 @@ void Commit(States *State){
   puts("Escribe el nombre de archivo que deseas hacer commit");
   __fpurge(stdin);
   gets(archcommit);
-  printf("adios\n");
   if(comactual!=NULL){
-    printf("HOLA\n");
     numeroc=comactual->numcom+1;
+    strcpy(pasado,comactual->ncommit);
   }
   else{
-    printf("hola\n");
     puts("Todavia no tiene ningun commit anterior");
     numeroc=1;
   }
@@ -351,8 +350,8 @@ void Commit(States *State){
       string[strlen(string)-1]='\0';
       fprintf(archivo2, "%s\n", string);
     }
-    fclose(archivo);
     fclose(archivo2);
+    fclose(archivo);
     puts("Commit realizado existosamente!");
     puts("Este archivo es pulleable?");
     printf("1. Si\n2. No\n");
@@ -362,8 +361,6 @@ void Commit(States *State){
       pull=1;
     else
       pull=0;
-    printf("Valor de pull: %d\n", pull);
-    getchar();
     nuevo=(tipocommit*)malloc(sizeof(tipocommit));
     nuevo->numcom=numeroc;
     nuevo->pull=pull;
@@ -371,6 +368,25 @@ void Commit(States *State){
     strcpy(nuevo->fecha,buffer);
     strcpy(nuevo->usuario,usractual);
     strcpy(nuevo->nproyecto,proactual);
+    if(numeroc!=1){
+      linea=1;
+      archivo2=fopen(pasado,"rt");
+      archivo=fopen(archcommit, "rt");
+      while(fgets(string2,999,archivo2)!=NULL){
+        if(fgets(string,999,archivo)!=NULL){
+          if(strcmp(string,string2)!=0){
+            sprintf(flag,"%i ",linea);
+            strcat(nuevo->lineas,flag);
+          }
+        }
+        linea++;
+      }
+      fclose(archivo);
+      fclose(archivo2);
+    }
+    else
+      strcpy(nuevo->lineas,"Primer commit no se cambiaron lineas");
+    nuevo->status=0;
     nuevo->sig=NULL;
     if(iniciocom!=NULL){
     busca=iniciocom;
@@ -384,15 +400,25 @@ void Commit(States *State){
 
   }
   else{
-  puts("El archivo insertado no existe");
-  getchar();
-  system("clear");
-  *State=VER_PROYECTOS;
-}
+    puts("El archivo insertado no existe");
+    getchar();
+    system("clear");
+    *State=VER_PROYECTOS;
+  }
 
 }
 
 void Revert(States *State){
+  int i=0,opcion;
+  tipocommit *busca;
+  char proyecto[20];
+  strcpy(proyecto,proactual);
+  busca=iniciocom;
+  if(busca!=NULL){
+    while(busca!=NULL){
+      busca=busca->sig;
+    }
+  }
   *State = MENU_PRINCIPAL;
 }
 
@@ -593,7 +619,7 @@ void escribir(States *State){
     fputs("\n",archivo);
     fputs(commit->lineas,archivo);
     fputs("\n",archivo);
-    fprintf(archivo,"%i\n%i",commit->pull, commit->numcom);
+    fprintf(archivo,"%i\n%i\n%i",commit->pull, commit->numcom,commit->status);
     fputs("\n",archivo);
     commit=commit->sig;
   }
