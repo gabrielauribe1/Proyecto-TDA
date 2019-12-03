@@ -23,7 +23,7 @@ typedef struct def_MasterBranch{
 
 typedef struct def_Commit{
   int numcom,pull,lineas[100];
-  char ncommit[100], fecha[20], usuario[20], nproyecto[20];
+  char ncommit[100], fecha[40], usuario[20], nproyecto[20];
   struct def_Commit *sig;
 }tipocommit;
 
@@ -111,6 +111,7 @@ void LeerArch(States* State){
 	fgets(string,19,archivo)!=NULL;
 	strcpy(temp3->nproyecto,string);
 	temp3->nproyecto[strlen(temp3->nproyecto)-1]='\0';
+  temp3->sig=NULL;
 	if(iniciousrpro!=NULL){
 	  temp4=iniciousrpro;
 	  while(temp4->sig!=NULL)
@@ -135,6 +136,7 @@ void LeerArch(States* State){
 	fgets(string,19,archivo)!=NULL;
 	strcpy(temp5->nproyecto,string);
 	temp5->nproyecto[strlen(temp5->nproyecto)-1]='\0';
+  temp5->sig=NULL;
 	if(iniciomb!=NULL){
 	  temp6=iniciomb;
 	  while(temp6->sig!=NULL)
@@ -169,6 +171,7 @@ void LeerArch(States* State){
 	temp7->usuario[strlen(temp7->usuario)-1]='\0';
 
 	fscanf(archivo, "%i\n", &temp7->numcom);
+  temp7->sig=NULL;
 
 	if(iniciocom!=NULL){
 	  temp8=iniciocom;
@@ -293,7 +296,7 @@ void VerProyectos(States *State){
 
 void Commit(States *State){
   char string[1000], string2[1000], archcommit[50], archcommit2[100],buffer[200], flag[4];
-  tipocommit *busca,*comactual=NULL;
+  tipocommit *busca,*comactual=NULL,*nuevo;
   int numeroc=0, pull, pulleable;
   FILE *archivo, *archivo2;
 
@@ -315,12 +318,16 @@ void Commit(States *State){
   puts("Escribe el nombre de archivo que deseas hacer commit");
   __fpurge(stdin);
   gets(archcommit);
+  printf("adios");
   if(comactual==NULL){
+    printf("hola");
     puts("Todavia no tiene ningun commit anterior");
-    numeroc++;
+    numeroc=1;
   }
-  else
+  else{
+    printf("HOLA");
     numeroc=busca->numcom+1;
+  }
   archivo= fopen(archcommit, "rt");
   if(archivo!=NULL){
     strcpy(archcommit2,proactual);
@@ -339,20 +346,36 @@ void Commit(States *State){
     }
     fclose(archivo);
     fclose(archivo2);
-      puts("Commit realizado existosamente!");
-      puts("Este archivo es pulleable?");
-      printf("1. Si\n2. No\n");
-      __fpurge(stdin);
-      scanf("%d", &pulleable);
-      if(pulleable==1){
-        pull=1;
-      }
-      else{
+    puts("Commit realizado existosamente!");
+    puts("Este archivo es pulleable?");
+    printf("1. Si\n2. No\n");
+    __fpurge(stdin);
+    scanf("%d", &pulleable);
+    if(pulleable==1){
+      pull=1;
+    }
+    else{
       pull=0;
-      }
-      printf("Valor de pull: %d\n", pull);
-      getchar();
-      *State=MENU_PRINCIPAL;
+    }
+    printf("Valor de pull: %d\n", pull);
+    getchar();
+    nuevo=(tipocommit*)malloc(sizeof(tipocommit));
+    nuevo->numcom=numeroc;
+    nuevo->pull=pull;
+    strcpy(nuevo->ncommit,archcommit2);
+    strcpy(nuevo->fecha,buffer);
+    strcpy(nuevo->usuario,usractual);
+    strcpy(nuevo->nproyecto,proactual);
+    nuevo->sig=NULL;
+    if(iniciocom!=NULL){
+    busca=iniciocom;
+      while(busca->sig!=NULL)
+        busca=busca->sig;
+      busca->sig=nuevo;
+    }
+    else
+      iniciocom=nuevo;
+    *State=MENU_PRINCIPAL;
 
   }
   else{

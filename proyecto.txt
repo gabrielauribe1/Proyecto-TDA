@@ -8,3 +8,7 @@ gaby
 proyecto2.txt
 alan
 proyecto2.txt
+david
+TDA
+gaby
+TDA
