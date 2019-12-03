@@ -418,7 +418,6 @@ void Pull(States *State){
       __fpurge(stdin);
       scanf("%i",&opcion);
       strcpy(commit,commits[opcion-1]);
-      puts(commit);
       puts("A que archivo lo quieres pullear?");
       __fpurge(stdin);
       gets(nombre);
