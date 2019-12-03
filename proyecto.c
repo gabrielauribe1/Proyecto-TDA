@@ -98,7 +98,6 @@ void LeerArch(States* State){
      fclose(archivo);
   }
 
-
   //Se lee la relacion entre USUARIOS Y PROYECTOS
   archivo = fopen("proyecto.txt", "rt");
 
@@ -123,7 +122,6 @@ void LeerArch(States* State){
       }
       fclose(archivo);
     }
-
 
    //Se leen los commits de los MASTER B
   archivo = fopen("masterbranch.txt", "rt");
@@ -172,7 +170,7 @@ void LeerArch(States* State){
 
 	fscanf(archivo, "%i\n", &temp7->numcom);
   temp7->sig=NULL;
-  
+
 	if(iniciocom!=NULL){
 	  temp8=iniciocom;
 	  while(temp8->sig!=NULL)
@@ -184,7 +182,6 @@ void LeerArch(States* State){
       }
       fclose(archivo);
     }
-    puts("Que haces aqui?");
   *State=LOG_IN;
 }
 
@@ -193,6 +190,11 @@ void LogIn(States* State){
     char usuario[50],contrasena[50];
     tipousuarios *temp;
     temp=iniciousr;
+    system("clear");
+    printf("  _    ___   ___ ___ _  _ \n");
+    printf(" | |  / _ \\ / __|_ _| \\| |\n");
+    printf(" | |_| (_) | (_ || || .` |\n");
+    printf(" |____\\___/ \\___|___|_|\\_|\n");
     puts("Introduzca su nombre de usuario: ");
     scanf("%s", usuario);
     while(temp!=NULL && strcmp(usuario,temp->usuario)!=0)
@@ -216,6 +218,13 @@ void LogIn(States* State){
 
 void MenuPrincipal(States *State){
   int Opcion;
+  system("clear");
+  printf("\n");
+  printf("__   _____ ___ ___ ___ ___  _  _    ___ ___  _  _ _____ ___  ___  _      _____   _____ _____ ___ __  __ \n");
+  printf("\\ \\ / | __| _ / __|_ _/ _ \\| \\| |  / __/ _ \\| \\| |_   _| _ \\/ _ \\| |    / __\\ \\ / / __|_   _| __|  \\/  |\n");
+  printf(" \\ V /| _||   \\__ \\| | (_) | .` | | (_| (_) | .` | | | |   | (_) | |__  \\__ \\\\ V /\\__ \\ | | | _|| |\\/| | \n");
+  printf("  \\_/ |___|_|_|___|___\\___/|_|\\_|  \\___\\___/|_|\\_| |_| |_|_\\\\___/|____| |___/ |_| |___/ |_| |___|_|  |_|\n");
+  printf("\n\n");
   puts("1. Ver proyectos");
   puts("2. Crear proyectos");
   puts("3. Crear usuario");
@@ -244,7 +253,8 @@ void VerProyectos(States *State){
   int Opcion,i=0;
   tipouproyecto *busca;
   char proyectos[30][20];
-  puts("Los proyectos disponibles son los siguientes, seleccione alguno: ");
+  system("clear");
+  puts("Los proyectos disponibles son los siguientes, seleccione alguno:\n");
   busca=iniciousrpro;
   while(busca!=NULL){
     if(strcmp(busca->usuario,usractual)==0){
@@ -257,7 +267,7 @@ void VerProyectos(States *State){
   }
   if(i==0){
     system("clear");
-    puts("No tienes proyectos");
+    puts("No tienes proyectos disponibles");
     getchar();
     *State=MENU_PRINCIPAL;
   }
@@ -265,7 +275,7 @@ void VerProyectos(States *State){
     __fpurge(stdin);
     scanf(" %i",&Opcion);
     strcpy(proactual,proyectos[Opcion-1]);
-
+    puts("Que desea hacer en base al proyecto seleccionado?");
     puts("1. Commit");
     puts("2. Revert");
     puts("3. Pull");
@@ -300,7 +310,13 @@ void Commit(States *State){
   tipocommit *busca,*comactual=NULL,*nuevo;
   int numeroc=0, pull, pulleable;
   FILE *archivo, *archivo2;
-
+  system("clear");
+  printf("\n");
+  printf("   ___ ___  __  __ __  __ ___ _____ \n");
+  printf("  / __/ _ \\|  \\/  |  \\/  |_ _|_   _| \n");
+  printf(" | (_| (_) | |\\/| | |\\/| || |  | |\n");
+  printf("  \\___\\___/|_|  |_|_|  |_|___| |_|  \n");
+  printf("\n\n");
   //uso de la libreria time.h
   time_t now = time(NULL);
   time(&now);
@@ -316,16 +332,14 @@ void Commit(States *State){
       comactual=busca;
     busca=busca->sig;
   }
-  puts("Escribe el nombre de archivo que deseas hacer commit");
+  puts("Escriba el nombre de archivo que deseas hacer commit:");
   __fpurge(stdin);
   gets(archcommit);
-  printf("adios\n");
   if(comactual!=NULL){
     printf("HOLA\n");
     numeroc=comactual->numcom+1;
   }
   else{
-    printf("hola\n");
     puts("Todavia no tiene ningun commit anterior");
     numeroc=1;
   }
@@ -348,7 +362,7 @@ void Commit(States *State){
     fclose(archivo);
     fclose(archivo2);
     puts("Commit realizado existosamente!");
-    puts("Este archivo es pulleable?");
+    puts("Este archivo es para hacer pull?");
     printf("1. Si\n2. No\n");
     __fpurge(stdin);
     scanf("%d", &pulleable);
@@ -358,8 +372,6 @@ void Commit(States *State){
     else{
       pull=0;
     }
-    printf("Valor de pull: %d\n", pull);
-    getchar();
     nuevo=(tipocommit*)malloc(sizeof(tipocommit));
     nuevo->numcom=numeroc;
     nuevo->pull=pull;
@@ -385,10 +397,6 @@ void Commit(States *State){
   system("clear");
   *State=VER_PROYECTOS;
 }
-
-
-
-
 }
 
 void Revert(States *State){
