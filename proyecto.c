@@ -45,7 +45,7 @@ int main(void){
         {STATUS, Status},
         {CREAR_PROYECTO, CrearProyecto},
         {CREAR_USUARIO, CrearUsuario},
-	{ESCRIBIR, escribir},
+	      {ESCRIBIR, escribir},
         {SALIR, Salir}
     };
 
