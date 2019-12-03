@@ -23,7 +23,7 @@ typedef struct def_MasterBranch{
 
 typedef struct def_Commit{
   int numcom,pull,lineas[100];
-  char ncommit[100], fecha[40], usuario[20], nproyecto[20];
+  char ncommit[100], fecha[30], usuario[20], nproyecto[20];
   struct def_Commit *sig;
 }tipocommit;
 
@@ -51,7 +51,7 @@ int main(void){
         {STATUS, Status},
         {CREAR_PROYECTO, CrearProyecto},
         {CREAR_USUARIO, CrearUsuario},
-	{ESCRIBIR, escribir},
+	      {ESCRIBIR, escribir},
         {SALIR, Salir}
     };
 
@@ -75,7 +75,6 @@ void LeerArch(States* State){
   tipomasterb *temp5, *temp6;
   tipocommit *temp7, *temp8;
   FILE *archivo;
-
   //Se leen todos los USUARIOS
   archivo=fopen("usuarios.txt","rt");
   if(archivo!=NULL){
@@ -86,6 +85,7 @@ void LeerArch(States* State){
       fgets(string,19,archivo)!=NULL;
       strcpy(temp->contra,string);
       temp->contra[strlen(temp->contra)-1]='\0';
+      temp->sig=NULL;
       if(iniciousr!=NULL){
         temp2= iniciousr;
         while(temp2->sig!=NULL)
@@ -162,7 +162,7 @@ void LeerArch(States* State){
 	strcpy(temp7->nproyecto,string);
 	temp7->nproyecto[strlen(temp7->nproyecto)-1]='\0';
 
-	fgets(string,19,archivo);
+	fgets(string,29,archivo);
 	strcpy(temp7->fecha,string);
 	temp7->fecha[strlen(temp7->fecha)-1]='\0';
 
@@ -176,7 +176,7 @@ void LeerArch(States* State){
 	if(iniciocom!=NULL){
 	  temp8=iniciocom;
 	  while(temp8->sig!=NULL)
-	    temp8=temp7->sig;
+	    temp8=temp8->sig;
 	  temp8->sig=temp7;
 	}
 	else
@@ -184,6 +184,7 @@ void LeerArch(States* State){
       }
       fclose(archivo);
     }
+    puts("Que haces aqui?");
   *State=LOG_IN;
 }
 
@@ -318,15 +319,15 @@ void Commit(States *State){
   puts("Escribe el nombre de archivo que deseas hacer commit");
   __fpurge(stdin);
   gets(archcommit);
-  printf("adios");
-  if(comactual==NULL){
-    printf("hola");
-    puts("Todavia no tiene ningun commit anterior");
-    numeroc=1;
+  printf("adios\n");
+  if(comactual!=NULL){
+    printf("HOLA\n");
+    numeroc=comactual->numcom+1;
   }
   else{
-    printf("HOLA");
-    numeroc=busca->numcom+1;
+    printf("hola\n");
+    puts("Todavia no tiene ningun commit anterior");
+    numeroc=1;
   }
   archivo= fopen(archcommit, "rt");
   if(archivo!=NULL){
