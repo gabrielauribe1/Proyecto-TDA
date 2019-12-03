@@ -412,7 +412,7 @@ void Revert(States *State){
   printf(" |   | _| \\ V /| _||   / | | \n");
   printf(" |_|_|___| \\_/ |___|_|_\\ |_|  \n");
   printf("\n");
-  printf("Revert prueba, inserta un numero\n");
+  printf("Revert letrero prueba, inserta un numero\n");
   __fpurge(stdin);
   scanf("%d",&flag);
   getchar();
@@ -420,10 +420,32 @@ void Revert(States *State){
 }
 
 void Pull(States *State){
+  int flag;
+  system("clear");
+  printf("  ___ _   _ _    _    \n");
+  printf(" | _ | | | | |  | |   \n");
+  printf(" |  _| |_| | |__| |__ \n");
+  printf(" |_|  \\___/|____|____|\n");
+  printf("\n");
+  printf("Pull letrero prueba, inserta un numero\n");
+  __fpurge(stdin);
+  scanf("%d",&flag);
+  getchar();
   *State = MENU_PRINCIPAL;
 }
 
 void Status(States *State){
+  int flag;
+  system("clear");
+  printf("  ___ _____ _ _____ _   _ ___ \n");
+  printf(" / __|_   _/_|_   _| | | / __|\n");
+  printf(" \\__ \\ | |/ _ \\| | | |_| \\__ \\\n");
+  printf(" |___/ |_/_/ \\_|_|  \\___/|___/\n");
+  printf("\n");
+  printf("Status letrero prueba, inserta un numero\n");
+  __fpurge(stdin);
+  scanf("%d",&flag);
+  getchar();
   *State = MENU_PRINCIPAL;
 }
 
