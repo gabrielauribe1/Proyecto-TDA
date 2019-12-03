@@ -254,6 +254,7 @@ void VerProyectos(States *State){
   if(i==0){
     system("clear");
     puts("No tienes proyectos");
+    getchar();
     *State=MENU_PRINCIPAL;
   }
   else{
@@ -293,7 +294,7 @@ void VerProyectos(States *State){
 void Commit(States *State){
   char string[1000], string2[1000], archcommit[50], archcommit2[100],buffer[200], flag[4];
   tipocommit *busca,*comactual=NULL;
-  int numeroc=0;
+  int numeroc=0, pull, pulleable;
   FILE *archivo, *archivo2;
 
   //uso de la libreria time.h
@@ -328,7 +329,7 @@ void Commit(States *State){
     sprintf(flag,"%d", numeroc);
     strcat(archcommit2, flag);
     puts(archcommit2);
-    //strcat(archcommit2, ".txt");
+    strcat(archcommit2, ".txt");
 
     archivo2=fopen(archcommit2, "wt");
 
@@ -338,10 +339,26 @@ void Commit(States *State){
     }
     fclose(archivo);
     fclose(archivo2);
+      puts("Commit realizado existosamente!");
+      puts("Este archivo es pulleable?");
+      printf("1. Si\n2. No\n");
+      __fpurge(stdin);
+      scanf("%d", &pulleable);
+      if(pulleable==1){
+        pull=1;
+      }
+      else{
+      pull=0;
+      }
+      printf("Valor de pull: %d\n", pull);
+      getchar();
+      *State=MENU_PRINCIPAL;
 
   }
   else{
   puts("El archivo insertado no existe");
+  getchar();
+  system("clear");
   *State=VER_PROYECTOS;
 }
 
