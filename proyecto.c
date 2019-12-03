@@ -194,7 +194,7 @@ void LogIn(States* State){
     printf("  _    ___   ___ ___ _  _ \n");
     printf(" | |  / _ \\ / __|_ _| \\| |\n");
     printf(" | |_| (_) | (_ || || .` |\n");
-    printf(" |____\\___/ \\___|___|_|\\_|\n");
+    printf(" |____\\___/ \\___|___|_|\\_|\n\n\n");
     puts("Introduzca su nombre de usuario: ");
     scanf("%s", usuario);
     while(temp!=NULL && strcmp(usuario,temp->usuario)!=0)
@@ -254,6 +254,11 @@ void VerProyectos(States *State){
   tipouproyecto *busca;
   char proyectos[30][20];
   system("clear");
+  printf("  ___ ___  _____   _____ ___ _____ ___  ___ \n");
+  printf(" | _ | _ \\/ _ \\ \\ / | __/ __|_   _/ _ \\/ __|\n");
+  printf(" |  _|   | (_) \\ V /| _| (__  | || (_) \\__ \\\n");
+  printf(" |_| |_|_\\\\___/ |_| |___\\___| |_| \\___/|___/\n");
+  printf("\n\n");
   puts("Los proyectos disponibles son los siguientes, seleccione alguno:\n");
   busca=iniciousrpro;
   while(busca!=NULL){
@@ -275,7 +280,7 @@ void VerProyectos(States *State){
     __fpurge(stdin);
     scanf(" %i",&Opcion);
     strcpy(proactual,proyectos[Opcion-1]);
-    puts("Que desea hacer en base al proyecto seleccionado?");
+    puts("\n\nQue desea hacer en base al proyecto seleccionado?");
     puts("1. Commit");
     puts("2. Revert");
     puts("3. Pull");
@@ -400,12 +405,17 @@ void Commit(States *State){
 }
 
 void Revert(States *State){
+  int flag;
   system("clear");
   printf("  ___ _____   _____ ___ _____\n");
   printf(" | _ | __\\ \\ / | __| _ |_   _|\n");
   printf(" |   | _| \\ V /| _||   / | | \n");
   printf(" |_|_|___| \\_/ |___|_|_\\ |_|  \n");
   printf("\n");
+  printf("Revert prueba, inserta un numero\n");
+  __fpurge(stdin);
+  scanf("%d",&flag);
+  getchar();
   *State = MENU_PRINCIPAL;
 }
 
@@ -418,11 +428,16 @@ void Status(States *State){
 }
 
 void CrearProyecto(States *State){
-  system("clear");
   tipouproyecto *busca,*busca3, *nuevousuario;
   tipousuarios *busca2;
   char nombre[20], nombreusu[20];
   int Nusuarios, i;
+  system("clear");
+  printf(" _  _ _   _ _____   _____    ___ ___  _____   _____ ___ _____ ___ \n");
+  printf("| \\| | | | | __\\ \\ / / _ \\  | _ | _ \\/ _ \\ \\ / | __/ __|_   _/ _ \\ \n");
+  printf("| .` | |_| | _| \\ V | (_) | |  _|   | (_) \\ V /| _| (__  | || (_) |\n");
+  printf("|_|\\_|\\___/|___| \\_/ \\___/  |_| |_|_\\\\___/ |_| |___\\___| |_| \\___/\n");
+  printf("\n\n");
   puts("Cual es el nombre del proyecto? (max 19 caracteres)");
   __fpurge(stdin);
   gets(nombre);
@@ -485,6 +500,14 @@ void CrearProyecto(States *State){
 void CrearUsuario(States *State){
   tipousuarios *nuevo,*busca;
   char nombre[20],passwrd[20];
+  system("clear");
+  system("clear");
+  printf(" _  _ _   _ _____   _____    _   _ ___ _   _  _   ___ ___ ___ \n");
+  printf("| \\| | | | | __\\ \\ / / _ \\  | | | / __| | | |/_\\ | _ |_ _/ _ \\ \n");
+  printf("| .` | |_| | _| \\ V | (_) | | |_| \\__ | |_| / _ \\|   /| | (_) |\n");
+  printf("|_|\\_|\\___/|___| \\_/ \\___/   \\___/|___/\\___/_/ \\_|_|_|___\\___/ \n");
+  printf("\n\n");
+
   printf("Como se va a llamar el nuevo usuario (19 caracteres max)\n");
   __fpurge(stdin);
   gets(nombre);
