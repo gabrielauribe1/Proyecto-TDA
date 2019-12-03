@@ -22,8 +22,8 @@ typedef struct def_MasterBranch{
 }tipomasterb;
 
 typedef struct def_Commit{
-  int numcom,pull,lineas[100];
-  char ncommit[100], fecha[30], usuario[20], nproyecto[20];
+  int numcom,pull;
+  char ncommit[100], fecha[30], usuario[20], nproyecto[20],lineas[1000];
   struct def_Commit *sig;
 }tipocommit;
 
@@ -170,9 +170,15 @@ void LeerArch(States* State){
 	strcpy(temp7->usuario,string);
 	temp7->usuario[strlen(temp7->usuario)-1]='\0';
 
+  fgets(string,999,archivo);
+  strcpy(temp7->lineas,string);
+  temp7->lineas[strlen(temp7->lineas)-1]='\0';
+
+  fscanf(archivo, "%i\n", &temp7->pull);
+
 	fscanf(archivo, "%i\n", &temp7->numcom);
   temp7->sig=NULL;
-  
+
 	if(iniciocom!=NULL){
 	  temp8=iniciocom;
 	  while(temp8->sig!=NULL)
@@ -352,12 +358,10 @@ void Commit(States *State){
     printf("1. Si\n2. No\n");
     __fpurge(stdin);
     scanf("%d", &pulleable);
-    if(pulleable==1){
+    if(pulleable==1)
       pull=1;
-    }
-    else{
+    else
       pull=0;
-    }
     printf("Valor de pull: %d\n", pull);
     getchar();
     nuevo=(tipocommit*)malloc(sizeof(tipocommit));
@@ -386,9 +390,6 @@ void Commit(States *State){
   *State=VER_PROYECTOS;
 }
 
-
-
-
 }
 
 void Revert(States *State){
@@ -396,6 +397,46 @@ void Revert(States *State){
 }
 
 void Pull(States *State){
+  int i=0,opcion;
+  tipocommit *busca;
+  char commit[100],commits[30][100],nombre[100],copiar[1000],proyecto[20];
+  FILE *com,*usuario;
+  strcpy(proyecto,proactual);
+  busca=iniciocom;
+  if(busca!=NULL){
+    while(busca!=NULL){
+      if(strcmp(busca->nproyecto,proyecto)==0 && busca->pull==1){
+        strcpy(commits[i],busca->ncommit);
+        printf("%i.- %s\n",i+1,busca->ncommit);
+        i++;
+      }
+      busca=busca->sig;
+    }
+    if(i==0)
+      puts("No hay commits que se puedan pullear.");
+    else{
+      __fpurge(stdin);
+      scanf("%i",&opcion);
+      strcpy(commit,commits[opcion-1]);
+      puts(commit);
+      puts("A que archivo lo quieres pullear?");
+      __fpurge(stdin);
+      gets(nombre);
+      com=fopen(commit,"rt");
+      if(com!=NULL){
+        usuario=fopen(nombre,"wt");
+        if(usuario!=NULL){
+          while(fgets(copiar,999,com)!=NULL){
+            copiar[strlen(copiar)-1]='\0';
+            fputs(copiar,usuario);
+            fputs("\n",usuario);
+          }
+          fclose(usuario);
+        }
+        fclose(com);
+      }
+    }
+  }
   *State = MENU_PRINCIPAL;
 }
 
@@ -551,7 +592,9 @@ void escribir(States *State){
     fputs("\n",archivo);
     fputs(commit->usuario,archivo);
     fputs("\n",archivo);
-    fprintf(archivo,"%d", commit->numcom);
+    fputs(commit->lineas,archivo);
+    fputs("\n",archivo);
+    fprintf(archivo,"%i\n%i",commit->pull, commit->numcom);
     fputs("\n",archivo);
     commit=commit->sig;
   }
