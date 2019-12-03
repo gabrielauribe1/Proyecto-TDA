@@ -172,7 +172,7 @@ void LeerArch(States* State){
 
 	fscanf(archivo, "%i\n", &temp7->numcom);
   temp7->sig=NULL;
-
+  
 	if(iniciocom!=NULL){
 	  temp8=iniciocom;
 	  while(temp8->sig!=NULL)
