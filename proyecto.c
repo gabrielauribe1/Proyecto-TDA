@@ -400,6 +400,12 @@ void Commit(States *State){
 }
 
 void Revert(States *State){
+  system("clear");
+  printf("  ___ _____   _____ ___ _____\n");
+  printf(" | _ | __\\ \\ / | __| _ |_   _|\n");
+  printf(" |   | _| \\ V /| _||   / | | \n");
+  printf(" |_|_|___| \\_/ |___|_|_\\ |_|  \n");
+  printf("\n");
   *State = MENU_PRINCIPAL;
 }
 
