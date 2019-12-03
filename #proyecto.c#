@@ -1,10 +1,7 @@
-
-
-// Inclusion de bibliotecas
+// Inclusipn de bibliotecas
 #include "maquinas_de_estado.h"
 #include<stdio.h>
 #include<string.h>
-#include<time.h>
 
 typedef struct def_Usuarios{
   char usuario[20], contra[20];
@@ -27,14 +24,11 @@ typedef struct def_Commit{
   struct def_Commit *sig;
 }tipocommit;
 
-//Variables globales
-//Inicios de las listas dinamicas, ademas de variables de contral de usuario y proyecto
 tipousuarios *iniciousr=NULL;
 tipocommit *iniciocom=NULL;
 tipomasterb *iniciomb=NULL;
 tipouproyecto *iniciousrpro=NULL;
 char usractual [20];
-char proactual[20];
 
 int main(void){
     system("clear");
@@ -212,6 +206,8 @@ void LogIn(States* State){
 
 void MenuPrincipal(States *State){
   int Opcion;
+  puts("Bienvenidos al Menu principal\n");
+  puts("Favor de elegir:")
   puts("1. Ver proyectos");
   puts("2. Crear proyectos");
   puts("3. Crear usuario");
@@ -236,37 +232,17 @@ void MenuPrincipal(States *State){
     }
 }
 
-void VerProyectos(States *State){
-  int Opcion,i=0;
-  tipouproyecto *busca;
-  char proyectos[30][20];
+ void VerProyectos(States *State){
+  int Opcion;
   puts("Los proyectos disponibles son los siguientes, seleccione alguno: ");
-  busca=iniciousrpro;
-  while(busca!=NULL){
-    if(strcmp(busca->usuario,usractual)==0){
-      strcpy(proyectos[i],busca->nproyecto);
-      i++;
-      printf("%i.- ",i);
-      puts(busca->nproyecto);
-    }
-    busca=busca->sig;
-  }
-  if(i==0){
-    system("clear");
-    puts("No tienes proyectos");
-    *State=MENU_PRINCIPAL;
-  }
-  else{
-    __fpurge(stdin);
-    scanf(" %i",&Opcion);
-    strcpy(proactual,proyectos[Opcion-1]);
+  puts("(Se selecciona alguno)");
 
-    puts("1. Commit");
-    puts("2. Revert");
-    puts("3. Pull");
-    puts("4. Status");
-    puts("5. Regresar menu anterior");
-    scanf("%d", &Opcion);
+  puts("1. Commit");
+  puts("2. Revert");
+  puts("3. Pull");
+  puts("4. Status");
+  puts("5. Regresar menu anterior");
+  scanf("%d", &Opcion);
 
     switch(Opcion){
         case 1:
@@ -287,67 +263,10 @@ void VerProyectos(States *State){
         default:
             puts("Opcion invalida");
     }
-  }
 }
 
 void Commit(States *State){
-  char string[1000], string2[1000], archcommit[50], archcommit2[100],buffer[200], flag[4];
-  tipocommit *busca,*comactual=NULL;
-  int numeroc=0;
-  FILE *archivo, *archivo2;
-
-  //uso de la libreria time.h
-  time_t now = time(NULL);
-  time(&now);
-  struct tm *mytime = localtime(&now);
-  //now=time(NULL);
-
-  mytime=localtime(&now);
-  sprintf(buffer, "%d:%d-%d-%d-%d_", mytime->tm_hour, mytime->tm_min,mytime->tm_mday, mytime->tm_mon+1, mytime->tm_year+1900);
-
-  busca=iniciocom;
-  while(busca!=NULL){
-    if(strcmp(busca->usuario, usractual)==0 && strcmp(busca->nproyecto, proactual)==0)
-      comactual=busca;
-    busca=busca->sig;
-  }
-  puts("Escribe el nombre de archivo que deseas hacer commit");
-  __fpurge(stdin);
-  gets(archcommit);
-  if(comactual==NULL){
-    puts("Todavia no tiene ningun commit anterior");
-    numeroc++;
-  }
-  else
-    numeroc=busca->numcom+1;
-  archivo= fopen(archcommit, "rt");
-  if(archivo!=NULL){
-    strcpy(archcommit2,proactual);
-    strcat(archcommit2, usractual);
-    strcat(archcommit2, buffer);
-    sprintf(flag,"%d", numeroc);
-    strcat(archcommit2, flag);
-    puts(archcommit2);
-    //strcat(archcommit2, ".txt");
-
-    archivo2=fopen(archcommit2, "wt");
-
-    while(fgets(string, 999, archivo)!=NULL){
-      string[strlen(string)-1]='\0';
-      fprintf(archivo2, "%s\n", string);
-    }
-    fclose(archivo);
-    fclose(archivo2);
-
-  }
-  else{
-  puts("El archivo insertado no existe");
-  *State=VER_PROYECTOS;
-}
-
-
-
-
+  *State = MENU_PRINCIPAL;
 }
 
 void Revert(States *State){
@@ -368,7 +287,7 @@ void CrearProyecto(States *State){
   tipousuarios *busca2;
   char nombre[20], nombreusu[20];
   int Nusuarios, i;
-  puts("Cual es el nombre del proyecto? (max 19 caracteres)");
+  puts("Introduzca el nombre del proyecto (maximo 19 caracteres):");
   __fpurge(stdin);
   gets(nombre);
   busca=iniciousrpro;
@@ -379,65 +298,69 @@ void CrearProyecto(States *State){
     *State=CREAR_PROYECTO;
   }
   else{
-    puts("Cuantos usuarios van a participar en este proyecto?");
+    puts("Introduzca el numero de usuarios que van a participar en este proyecto?");
     scanf(" %d", &Nusuarios);
     i=0;
     nuevousuario=(tipouproyecto*)malloc(sizeof(tipouproyecto));
     strcpy(nuevousuario->usuario,usractual);
     strcpy(nuevousuario->nproyecto,nombre);
     nuevousuario->sig=NULL;
-    if(iniciousrpro!=NULL){
-    	busca3=iniciousrpro;
-    	while(busca3->sig!=NULL)
-    	  busca3=busca3->sig;
-    	busca3->sig=nuevousuario;
+    if(iniciousrpro!=NULL)
+      {
+	busca3=iniciousrpro;
+	while(busca3->sig!=NULL)
+	  busca3=busca3->sig;
+	busca3->sig=nuevousuario;
       }
     else
       iniciousrpro=nuevousuario;
-    do{
-    	printf("Inserta el nombre del usuario %d:\n", i+1);
-    	__fpurge(stdin);
-    	gets(nombreusu);
-    	busca2=iniciousr;
-    	while(busca2!=NULL && strcmp(busca2->usuario,nombreusu)!=0)
-    	  busca2=busca2->sig;
-    	if(busca2!=NULL){
-  	    i++;
-  	    nuevousuario=(tipouproyecto*)malloc(sizeof(tipouproyecto));
-  	    strcpy(nuevousuario->usuario,nombreusu);
-  	    strcpy(nuevousuario->nproyecto,nombre);
-  	    nuevousuario->sig=NULL;
-  	    if(iniciousrpro!=NULL){
-      		busca3=iniciousrpro;
-      		while(busca3->sig!=NULL)
-      		  busca3=busca3->sig;
-      		busca3->sig=nuevousuario;
+    do
+      {
+	printf("Iserte el nombre del usuario %d:\n", i+1);
+	__fpurge(stdin);
+	gets(nombreusu);
+	busca2=iniciousr;
+	while(busca2!=NULL && strcmp(busca2->usuario,nombreusu)!=0)
+	  busca2=busca2->sig;
+	if(busca2!=NULL)
+	    {
+	    i++;
+	    nuevousuario=(tipouproyecto*)malloc(sizeof(tipouproyecto));
+	    strcpy(nuevousuario->usuario,nombreusu);
+	    strcpy(nuevousuario->nproyecto,nombre);
+	    nuevousuario->sig=NULL;
+	    if(iniciousrpro!=NULL)
+	      {
+		busca3=iniciousrpro;
+		while(busca3->sig!=NULL)
+		  busca3=busca3->sig;
+		busca3->sig=nuevousuario;
 	      }
-  	    else
-  	      iniciousrpro=nuevousuario;
-  	  }
-  	  else
-  	  {
-  	  puts("Ese usuario no existe, inserte uno que este dado de alta");
-  	  }
-    }while(i<Nusuarios);
-
-  }
-  *State=MENU_PRINCIPAL;
-
+	    else
+	      iniciousrpro=nuevousuario;
+	  }
+	else
+	  {
+	  puts("Ese usuario no existe, inserte uno que ya este dado de alta");
+	  }
+      }while(i<Nusuarios);
+    
+      }
+    *State=MENU_PRINCIPAL;
+    
 }
 
 void CrearUsuario(States *State){
   tipousuarios *nuevo,*busca;
   char nombre[20],passwrd[20];
-  printf("Como se va a llamar el nuevo usuario (19 caracteres max)\n");
+  printf("Introduzca el nombre del nuevo usuario (maximo 19 caracteres):\n");
   __fpurge(stdin);
   gets(nombre);
   busca=iniciousr;
   while(busca!=NULL && strcmp(busca->usuario,nombre)!=0)
     busca=busca->sig;
   if(busca==NULL){
-    printf("Cual va a hacer la contrasena(19 caracteres max)\n");
+    printf("Introduzca la contrasena(maximo 19 caracteres):\n");
     __fpurge(stdin);
     gets(passwrd);
     nuevo=(tipousuarios*)malloc(sizeof(tipousuarios));
