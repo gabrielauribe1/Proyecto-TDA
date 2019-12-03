@@ -279,33 +279,41 @@ void VerProyectos(States *State){
   else{
     __fpurge(stdin);
     scanf(" %i",&Opcion);
-    strcpy(proactual,proyectos[Opcion-1]);
-    puts("\n\nQue desea hacer en base al proyecto seleccionado?");
-    puts("1. Commit");
-    puts("2. Revert");
-    puts("3. Pull");
-    puts("4. Status");
-    puts("5. Regresar menu anterior");
-    scanf("%d", &Opcion);
+    if(Opcion>i){
+      puts("Ese numero de proyecto no existe");
+      __fpurge(stdin);
+      getchar();
+    }
+    else
+    {
+      strcpy(proactual,proyectos[Opcion-1]);
+      puts("\n\nQue desea hacer en base al proyecto seleccionado?");
+      puts("1. Commit");
+      puts("2. Revert");
+      puts("3. Pull");
+      puts("4. Status");
+      puts("5. Regresar menu anterior");
+      scanf("%d", &Opcion);
 
-    switch(Opcion){
-        case 1:
-            *State = COMMIT;
-            break;
-        case 2:
-            *State = REVERT;
-            break;
-        case 3:
-            *State = PULL;
-            break;
-        case 4:
-            *State = STATUS;
-            break;
-        case 5:
-            *State = MENU_PRINCIPAL;
-            break;
-        default:
-            puts("Opcion invalida");
+      switch(Opcion){
+          case 1:
+              *State = COMMIT;
+              break;
+          case 2:
+              *State = REVERT;
+              break;
+          case 3:
+              *State = PULL;
+              break;
+          case 4:
+              *State = STATUS;
+              break;
+          case 5:
+              *State = MENU_PRINCIPAL;
+              break;
+          default:
+              puts("Opcion invalida");
+    }
     }
   }
 }
@@ -337,7 +345,7 @@ void Commit(States *State){
       comactual=busca;
     busca=busca->sig;
   }
-  puts("Escriba el nombre de archivo que deseas hacer commit:");
+  puts("Escriba el nombre de archivo  al cual que deseas hacerle commit:");
   __fpurge(stdin);
   gets(archcommit);
   if(comactual!=NULL){
@@ -345,7 +353,7 @@ void Commit(States *State){
     numeroc=comactual->numcom+1;
   }
   else{
-    puts("Todavia no tiene ningun commit anterior");
+    puts("Todavia no tiene ningun commit de este proyecto realizado anteriormente");
     numeroc=1;
   }
   archivo= fopen(archcommit, "rt");
@@ -366,7 +374,7 @@ void Commit(States *State){
     }
     fclose(archivo);
     fclose(archivo2);
-    puts("Commit realizado existosamente!");
+    puts("Commit realizado existosamente!\n");
     puts("Este archivo es para hacer pull?");
     printf("1. Si\n2. No\n");
     __fpurge(stdin);
@@ -467,11 +475,12 @@ void CrearProyecto(States *State){
   while(busca!=NULL && strcmp(busca->nproyecto,nombre)!=0)
     busca=busca->sig;
   if(busca!=NULL){
-    puts("Ese nombre ya esta en uso");
+    puts("Ese nombre ya esta en uso, inserte un nombre de proyecto diferente");
+    getchar();
     *State=CREAR_PROYECTO;
   }
   else{
-    puts("Cuantos usuarios van a participar en este proyecto?");
+    puts("Cuantos usuarios van a colaborar en este proyecto?");
     scanf(" %d", &Nusuarios);
     i=0;
     nuevousuario=(tipouproyecto*)malloc(sizeof(tipouproyecto));
@@ -511,6 +520,7 @@ void CrearProyecto(States *State){
   	  else
   	  {
   	  puts("Ese usuario no existe, inserte uno que este dado de alta");
+      getchar();
   	  }
     }while(i<Nusuarios);
 
@@ -555,7 +565,8 @@ void CrearUsuario(States *State){
     *State=MENU_PRINCIPAL;
   }
   else{
-    puts("Ese usuario ya existe");
+    puts("Ese usuario ya existe, inserte un nombre de usuario diferente");
+    getchar();
     *State=CREAR_USUARIO;
   }
 }
