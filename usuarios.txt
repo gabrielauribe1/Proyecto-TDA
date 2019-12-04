@@ -5,8 +5,14 @@ david
 alan
 123
 principal
+<<<<<<< HEAD
 123
 cesar
 123
 popo
 123
+=======
+123
+cesar
+cesarin
+>>>>>>> Comparar

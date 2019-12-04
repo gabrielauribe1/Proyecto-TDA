@@ -6,6 +6,7 @@ proyecto1
 
 gaby
 proyecto2.txt
+<<<<<<< HEAD
 alan
 proyecto2.txt
 david
@@ -40,3 +41,18 @@ cesar
 proyecto3
 cesar
 proyecto3
+=======
+alan
+proyecto2.txt
+david
+TDA
+gaby
+TDA
+david
+Joker
+cesar
+Joker
+gaby
+Joker
+>>>>>>> Comparar
+>>>>>>> Comparar
