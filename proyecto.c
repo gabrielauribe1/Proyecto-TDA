@@ -463,21 +463,28 @@ void Revert(States *State){
       }
       busca=busca->sig;
     }
-    __fpurge(stdin);
-    scanf(" %i",&opcion);
-    strcpy(comactual,commits[opcion-1]);
-    puts("A que archivo lo quieres escribir?");
-    __fpurge(stdin);
-    gets(nombre);
-    rev=fopen(comactual,"rt");
-    com=fopen(nombre,"wt");
-    while(fgets(string,999,rev)!=NULL){
-      string[strlen(string)-1]='\0';
-      fputs(string,com);
-      fputs("\n",com);
+    if(i!=0){
+      __fpurge(stdin);
+      scanf(" %i",&opcion);
+      strcpy(comactual,commits[opcion-1]);
+      puts("A que archivo lo quieres escribir?");
+      __fpurge(stdin);
+      gets(nombre);
+      rev=fopen(comactual,"rt");
+      com=fopen(nombre,"wt");
+      while(fgets(string,999,rev)!=NULL){
+        string[strlen(string)-1]='\0';
+        fputs(string,com);
+        fputs("\n",com);
+      }
+      fclose(com);
+      fclose(rev);
     }
-    fclose(com);
-    fclose(rev);
+    else
+      puts("No hay commits");
+  }
+  else{
+    puts("No hay commits");
   }
   *State = MENU_PRINCIPAL;
 }
