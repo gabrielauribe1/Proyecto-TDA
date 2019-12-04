@@ -113,7 +113,8 @@ void LeerArch(States* State){
   temp3->sig=NULL;
 	if(iniciousrpro!=NULL){
 	  temp4=iniciousrpro;
-	  while(temp4->sig!=NULL)
+	  while(temp4->sig!=
+      NULL)
 	    temp4=temp4->sig;
 	  temp4->sig=temp3;
 	}
@@ -280,7 +281,7 @@ void VerProyectos(States *State){
     __fpurge(stdin);
     scanf(" %i",&Opcion);
     if(Opcion>i){
-      puts("Ese numero de proyecto no existe");
+      puts("\nEse numero de proyecto no existe");
       __fpurge(stdin);
       getchar();
     }
@@ -345,7 +346,7 @@ void Commit(States *State){
       comactual=busca;
     busca=busca->sig;
   }
-  puts("Escriba el nombre de archivo  al cual que deseas hacerle commit:");
+  puts("Escriba el nombre de archivo al cual que deseas hacerle commit:");
   __fpurge(stdin);
   gets(archcommit);
   if(comactual!=NULL){
@@ -476,6 +477,7 @@ void CrearProyecto(States *State){
     busca=busca->sig;
   if(busca!=NULL){
     puts("Ese nombre ya esta en uso, inserte un nombre de proyecto diferente");
+    __fpurge(stdin);
     getchar();
     *State=CREAR_PROYECTO;
   }
