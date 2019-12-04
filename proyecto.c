@@ -534,17 +534,23 @@ void Pull(States *State){
 }
 
 void Status(States *State){
-  int flag;
+  char flag;
+  tipocommit *busca;
   system("clear");
   printf("  ___ _____ _ _____ _   _ ___ \n");
   printf(" / __|_   _/_|_   _| | | / __|\n");
   printf(" \\__ \\ | |/ _ \\| | | |_| \\__ \\\n");
   printf(" |___/ |_/_/ \\_|_|  \\___/|___/\n");
   printf("\n");
-  printf("Status letrero prueba, inserta un numero\n");
+  puts("Commit \t\t\t\t Lineas que se cambiaron\n");
+  busca=iniciocom;
+  while(busca!=NULL){
+    if(strcmp(busca->usuario, usractual)==0 && strcmp(busca->nproyecto, proactual)==0)
+      printf("%s %s\n",busca->ncommit,busca->lineas);
+    busca=busca->sig;
+  }
   __fpurge(stdin);
-  scanf("%d",&flag);
-  getchar();
+  flag=getchar();
   *State = MENU_PRINCIPAL;
 }
 
