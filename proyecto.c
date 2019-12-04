@@ -22,7 +22,7 @@ typedef struct def_MasterBranch{
 }tipomasterb;
 
 typedef struct def_Commit{
-  int numcom,pull,status;
+  int numcom,pull;
   char ncommit[100], fecha[30], usuario[20], nproyecto[20],lineas[1000];
   struct def_Commit *sig;
 }tipocommit;
@@ -113,8 +113,7 @@ void LeerArch(States* State){
   temp3->sig=NULL;
 	if(iniciousrpro!=NULL){
 	  temp4=iniciousrpro;
-	  while(temp4->sig!=
-      NULL)
+	  while(temp4->sig!=NULL)
 	    temp4=temp4->sig;
 	  temp4->sig=temp3;
 	}
@@ -176,9 +175,6 @@ void LeerArch(States* State){
   fscanf(archivo, "%i\n", &temp7->pull);
 
 	fscanf(archivo, "%i\n", &temp7->numcom);
-  temp7->sig=NULL;
-
-  fscanf(archivo, "%i\n", &temp7->status);
   temp7->sig=NULL;
 
 	if(iniciocom!=NULL){
@@ -418,7 +414,6 @@ void Commit(States *State){
     }
     else
       strcpy(nuevo->lineas,"Primer commit no se cambiaron lineas");
-    nuevo->status=0;
     nuevo->sig=NULL;
     if(iniciocom!=NULL){
     busca=iniciocom;
@@ -720,7 +715,7 @@ void escribir(States *State){
     fputs("\n",archivo);
     fputs(commit->lineas,archivo);
     fputs("\n",archivo);
-    fprintf(archivo,"%i\n%i\n%i",commit->pull, commit->numcom,commit->status);
+    fprintf(archivo,"%i\n%i",commit->pull, commit->numcom);
     fputs("\n",archivo);
     commit=commit->sig;
   }
