@@ -359,8 +359,8 @@ void Commit(States *State){
   __fpurge(stdin);
   gets(archcommit);
   if(comactual!=NULL){
-    printf("HOLA\n");
     numeroc=comactual->numcom+1;
+    strcpy(pasado,comactual->ncommit);
   }
   else{
     puts("Todavia no tiene ningun commit de este proyecto realizado anteriormente");
@@ -443,23 +443,41 @@ void Revert(States *State){
   int flag;
   int i=0,opcion;
   tipocommit *busca;
-  char proyecto[20];
+  char proyecto[20],usuario[20],commits[30][100],comactual[100],nombre[30],string[1000];
+  FILE *com,*rev;
   system("clear");
   printf("  ___ _____   _____ ___ _____\n");
   printf(" | _ | __\\ \\ / | __| _ |_   _|\n");
   printf(" |   | _| \\ V /| _||   / | | \n");
   printf(" |_|_|___| \\_/ |___|_|_\\ |_|  \n");
   printf("\n");
-  printf("Revert letrero prueba, inserta un numero\n");
-  __fpurge(stdin);
-  scanf("%d",&flag);
-  getchar();
   strcpy(proyecto,proactual);
+  strcpy(usuario,usractual);
   busca=iniciocom;
   if(busca!=NULL){
     while(busca!=NULL){
+      if(strcmp(busca->nproyecto,proyecto)==0 && strcmp(busca->usuario,usuario)==0){
+        strcpy(commits[i],busca->ncommit);
+        printf("%i.- %s\n",i+1,commits[i]);
+        i++;
+      }
       busca=busca->sig;
     }
+    __fpurge(stdin);
+    scanf(" %i",&opcion);
+    strcpy(comactual,commits[opcion-1]);
+    puts("A que archivo lo quieres escribir?");
+    __fpurge(stdin);
+    gets(nombre);
+    rev=fopen(comactual,"rt");
+    com=fopen(nombre,"wt");
+    while(fgets(string,999,rev)!=NULL){
+      string[strlen(string)-1]='\0';
+      fputs(string,com);
+      fputs("\n",com);
+    }
+    fclose(com);
+    fclose(rev);
   }
   *State = MENU_PRINCIPAL;
 }
@@ -475,10 +493,6 @@ void Pull(States *State){
   printf(" |  _| |_| | |__| |__ \n");
   printf(" |_|  \\___/|____|____|\n");
   printf("\n");
-  printf("Pull letrero prueba, inserta un numero\n");
-  __fpurge(stdin);
-  scanf("%d",&flag);
-  getchar();
   strcpy(proyecto,proactual);
   busca=iniciocom;
   if(busca!=NULL){
