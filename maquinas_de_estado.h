@@ -5,6 +5,7 @@
 
 // Definicion de los estados de la maquina de estados
 typedef enum States{
+    CREDITOS,
     LEER_ARCHIVOS,
     LOG_IN,
     MENU_PRINCIPAL,
@@ -40,3 +41,4 @@ void CrearProyecto(States *State);
 void CrearUsuario(States *State);
 void Salir(States *State);
 void escribir(States *State);
+void Creditos(States* State);

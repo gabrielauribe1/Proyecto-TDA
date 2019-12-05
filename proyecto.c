@@ -1,11 +1,24 @@
+/*
+ @file formato.c
 
+ @brief Este programa esta disenado para trabajar
+ como un sistema de control de versiones. En el
+ cual, se pueden dar de alta usuarios, proyectos,
+ asignar a usuarios a proyectos, hacer commits, reverts
+ pulls, pushs y ver el status de cada archivo modificado
+ por cada usuario.
 
-// Inclusion de bibliotecas
+ @autor David Halabe, Gabriela Uribe y Alan Flores
+ @date 05/12/2019
+ */
+
+/*Inclusion de bibliotecas*/
 #include "maquinas_de_estado.h"
 #include<stdio.h>
 #include<string.h>
 #include<time.h>
 
+/*Declaracion de estructuras dinamicas*/
 typedef struct def_Usuarios{
   char usuario[20], contra[20];
   struct def_Usuarios *sig;
@@ -27,8 +40,9 @@ typedef struct def_Commit{
   struct def_Commit *sig;
 }tipocommit;
 
-//Variables globales
-//Inicios de las listas dinamicas, ademas de variables de contral de usuario y proyecto
+/* Declaracion de variables globales*/
+/* Inicios de las listas dinamicas*/
+/* Variables de contral de usuario y proyecto*/
 tipousuarios *iniciousr=NULL;
 tipocommit *iniciocom=NULL;
 tipomasterb *iniciomb=NULL;
@@ -36,11 +50,12 @@ tipouproyecto *iniciousrpro=NULL;
 char usractual [20];
 char proactual[20];
 
-int main(void){
+int main(int argc, char *argv[]){
     system("clear");
     States MachineState=LEER_ARCHIVOS;
-    //maquina de estados con sus respectivas funciones
+    /*Maquina de estados con sus respectivas funciones*/
     StateMachine Machine[] = {
+        {CREDITOS, Creditos},
         {LEER_ARCHIVOS, LeerArch},
         {LOG_IN, LogIn},
         {MENU_PRINCIPAL, MenuPrincipal},
@@ -54,7 +69,6 @@ int main(void){
 	      {ESCRIBIR, escribir},
         {SALIR, Salir}
     };
-
     //bucle infinito de la maquina de estados
     for(;;){
       if(MachineState > STATE_NUM){
@@ -64,10 +78,20 @@ int main(void){
 	(*Machine[MachineState].funcion)(&MachineState);
       }
     }
-
-    return 0;
 }
 
+void Creditos(States* State){
+  puts("Creadores del sistema:\n");
+  puts("David Halabe");
+  puts("Maria Gabriela Uribe");
+  puts("Alan Flores");
+  *State=LEER_ARCHIVOS;
+}
+
+/*
+@func LeerArch, funcion encargada de leer todos los archivos generados
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void LeerArch(States* State){
   char string[101];
   tipousuarios *temp,*temp2;
@@ -75,7 +99,7 @@ void LeerArch(States* State){
   tipomasterb *temp5, *temp6;
   tipocommit *temp7, *temp8;
   FILE *archivo;
-  //Se leen todos los USUARIOS
+  //Se leen todos los USUARIOS registrados del archivo usuarios.txt
   archivo=fopen("usuarios.txt","rt");
   if(archivo!=NULL){
     while(fgets(string,19,archivo)!=NULL){
@@ -98,9 +122,8 @@ void LeerArch(States* State){
      fclose(archivo);
   }
 
-  //Se lee la relacion entre USUARIOS Y PROYECTOS
+  /*Se lee la relacion entre USUARIOS Y PROYECTOS registrados, del archivo proyecto.txt*/
   archivo = fopen("proyecto.txt", "rt");
-
   if(archivo!=NULL)
     {
       while(fgets(string,19,archivo)!=NULL){
@@ -123,7 +146,7 @@ void LeerArch(States* State){
       fclose(archivo);
     }
 
-   //Se leen los commits de los MASTER B
+   /*Se leen los commits de los MASTER B hechos, del archivo masterbranch.txt*/
   archivo = fopen("masterbranch.txt", "rt");
   if(archivo!=NULL)
     {
@@ -147,7 +170,7 @@ void LeerArch(States* State){
       fclose(archivo);
     }
 
-  //Se leen todos los COMMITS
+  /*Se leen todos los COMMITS hechos, del archivo commit.txt*/
   archivo = fopen("commit.txt", "rt");
   if(archivo!=NULL)
     {
@@ -191,7 +214,10 @@ void LeerArch(States* State){
   *State=LOG_IN;
 }
 
-//Menu
+/*
+@func LogIn, funcion encargada de desplegar el log in al usuario y validar si existe el usuario, valida si la contraseña es correcta
+@param Status, parametro que conecta a la funcion con la maquina de estado
+*/
 void LogIn(States* State){
     char usuario[50],contrasena[50];
     tipousuarios *temp;
@@ -222,6 +248,10 @@ void LogIn(States* State){
     }
 }
 
+/*
+@func MenuPrincipal, funcion encargada de desplegar el Menu principal al usuario para que elija que desea hacer
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void MenuPrincipal(States *State){
   int Opcion;
   system("clear");
@@ -255,6 +285,10 @@ void MenuPrincipal(States *State){
     }
 }
 
+/*
+@func VerProyectos, funcion encargada de desplegar los proyectos del usuario, para que este elija sobre cual hacer commits, revert, pulls y ver el status de sus proyectos
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void VerProyectos(States *State){
   int Opcion,i=0;
   tipouproyecto *busca;
@@ -285,15 +319,15 @@ void VerProyectos(States *State){
   else{
     __fpurge(stdin);
     scanf(" %i",&Opcion);
-    if(Opcion>i){
-      puts("\nEse numero de proyecto no existe");
+    if(Opcion>i || Opcion<0){
+      puts("\nEse numero/caracter de proyecto no existe");
       __fpurge(stdin);
       getchar();
     }
     else
     {
       strcpy(proactual,proyectos[Opcion-1]);
-      puts("\n\nQue desea hacer en base al proyecto seleccionado?");
+      puts("\nQue desea hacer en base al proyecto seleccionado?:");
       puts("1. Commit");
       puts("2. Revert");
       puts("3. Pull");
@@ -324,6 +358,10 @@ void VerProyectos(States *State){
   }
 }
 
+/*
+@func Commit, funcion encargada de generar el nombre del nuevo commit, y generar el archivo del commit
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void Commit(States *State){
   char string[1000], string2[1000], archcommit[50], archcommit2[100],buffer[200], flag[4],pasado[100];
   tipocommit *busca,*comactual=NULL,*nuevo;
@@ -369,6 +407,8 @@ void Commit(States *State){
     strcat(archcommit2, buffer);
     sprintf(flag,"%d", numeroc);
     strcat(archcommit2, flag);
+    puts("\nCommit realizado existosamente!");
+    puts("\nEl nombre del archivo de su commit es:");
     puts(archcommit2);
     strcat(archcommit2, ".txt");
 
@@ -380,7 +420,6 @@ void Commit(States *State){
     }
     fclose(archivo2);
     fclose(archivo);
-    puts("Commit realizado existosamente!");
     puts("Este archivo es para hacer pull?");
     printf("1. Si\n2. No\n");
     __fpurge(stdin);
@@ -427,13 +466,18 @@ void Commit(States *State){
 
   }
   else{
-  puts("El archivo insertado no existe");
+  puts("El archivo insertado no existe\n");
+  puts("Presione Enter para continuar");
   getchar();
   system("clear");
   *State=VER_PROYECTOS;
 }
 }
 
+/*
+@func Revert, funcion encargada de hacer los reverts mostrando los proyectos que ya tienen commits realizados. Pregunta en que archivo se desea hacer el revert
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void Revert(States *State){
   int flag;
   int i=0,opcion;
@@ -472,18 +516,29 @@ void Revert(States *State){
         fputs(string,com);
         fputs("\n",com);
       }
+      puts("Revert exitoso\n");
+      puts("Presione Enter para continuar");
+      getchar();
       fclose(com);
       fclose(rev);
     }
     else
-      puts("No hay commits");
+      puts("No hay commits\n");
+      puts("Presione Enter para continuar");
+      getchar();
   }
   else{
-    puts("No hay commits");
+    puts("No hay commits\n");
+    puts("Presione Enter para continuar");
+    getchar();
   }
   *State = MENU_PRINCIPAL;
 }
 
+/*
+@func Pull, funcion encargada de realizar los pulls a un nuevo archivo o a archivos anteriores
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void Pull(States *State){
   int i=0,opcion,flag;
   tipocommit *busca;
@@ -506,8 +561,11 @@ void Pull(States *State){
       }
       busca=busca->sig;
     }
-    if(i==0)
-      puts("No hay commits que se puedan pullear.");
+    if(i==0){
+      puts("No hay commits que se puedan pullear\n");
+      puts("Presione Enter para continuar");
+      getchar();
+    }
     else{
       __fpurge(stdin);
       scanf("%i",&opcion);
@@ -533,6 +591,10 @@ void Pull(States *State){
   *State = MENU_PRINCIPAL;
 }
 
+/*
+@func Status, funcion encargada de desplegar al usuario en la terminal los cambios que se realizaron en los commits con las lineas cambiadass
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void Status(States *State){
   char flag;
   tipocommit *busca;
@@ -542,11 +604,11 @@ void Status(States *State){
   printf(" \\__ \\ | |/ _ \\| | | |_| \\__ \\\n");
   printf(" |___/ |_/_/ \\_|_|  \\___/|___/\n");
   printf("\n");
-  puts("Commit \t\t\t\t Lineas que se cambiaron\n");
+  puts("\t\tCommit: \t\t\tLineas que se cambiaron:\n");
   busca=iniciocom;
   while(busca!=NULL){
     if(strcmp(busca->usuario, usractual)==0 && strcmp(busca->nproyecto, proactual)==0)
-      printf("%s %s\n",busca->ncommit,busca->lineas);
+      printf("%s    %s\n",busca->ncommit,busca->lineas);
     busca=busca->sig;
   }
   __fpurge(stdin);
@@ -554,6 +616,10 @@ void Status(States *State){
   *State = MENU_PRINCIPAL;
 }
 
+/*
+@func CrearProyecto, funcion encargada de dar de alta nuevos proyectos y validar los ya existentes
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void CrearProyecto(States *State){
   tipouproyecto *busca,*busca3, *nuevousuario;
   tipousuarios *busca2;
@@ -627,6 +693,10 @@ void CrearProyecto(States *State){
 
 }
 
+/*
+@func CrearUsuario, funcion encargada de dar alta a los nuevos usuarios y validar a los existentes
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void CrearUsuario(States *State){
   tipousuarios *nuevo,*busca;
   char nombre[20],passwrd[20];
@@ -664,11 +734,16 @@ void CrearUsuario(States *State){
   }
   else{
     puts("Ese usuario ya existe, inserte un nombre de usuario diferente");
+    puts("Presione Enter para continuar");
     getchar();
     *State=CREAR_USUARIO;
   }
 }
 
+/*
+@func escribir, funcion encargada de escribir en todos los archivos de la estructura
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void escribir(States *State){
   FILE* archivo;
   tipousuarios *usuarios;
@@ -730,6 +805,10 @@ void escribir(States *State){
   *State=SALIR;
 }
 
+/*
+@func Salir, funcion encaergada de liberar la memoria
+@param State, parametro que conecta a la funcion con la maquina de estado
+*/
 void Salir(States *State){
  tipousuarios *borra;
  tipouproyecto *proyecto;
